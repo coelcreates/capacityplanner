@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Agile Capacity Planner</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background: #f4f8fb;
+      color: #333;
+    }
+
+    header {
+      background: #4a90e2;
+      padding: 1em;
+      color: white;
+      text-align: center;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      background: #e0e8f0;
+      padding: 0.5em;
+    }
+
+    nav button {
+      background: #ffffff;
+      border: none;
+      padding: 0.8em 1.5em;
+      margin: 0 0.5em;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    nav button.active {
+      background: #4a90e2;
+      color: white;
+    }
+
+    main {
+      padding: 1em 2em;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .input-group {
+      margin: 1em 0;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 0.3em;
+      font-weight: bold;
+    }
+
+    .input-group input {
+      padding: 0.5em;
+      width: 100%;
+      max-width: 300px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1em 0;
+      background: white;
+    }
+
+    th, td {
+      padding: 0.7em;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background: #f0f4f8;
+    }
+
+    .status-green { background-color: #d4edda; }
+    .status-yellow { background-color: #fff3cd; }
+    .status-red { background-color: #f8d7da; }
+
+    .bar-chart {
+      display: flex;
+      gap: 10px;
+      margin-top: 1em;
+    }
+
+    .bar {
+      width: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      background: #ccc;
+      border-radius: 4px;
+    }
+
+    .bar-inner {
+      width: 100%;
+      border-radius: 4px 4px 0 0;
+    }
+
+    .bar-inner.green { background: #28a745; }
+    .bar-inner.yellow { background: #ffc107; }
+    .bar-inner.red { background: #dc3545; }
+
+    .support-columns {
+      display: flex;
+      gap: 2em;
+      flex-wrap: wrap;
+    }
+
+    .support-column {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .support-column ul {
+      background: white;
+      padding: 1em;
+      border-radius: 6px;
+      list-style: none;
+      margin: 0;
+    }
+
+    .support-column h3 {
+      margin-top: 0;
+    }
+
+    #sync-button {
+      background: #4a90e2;
+      color: white;
+      padding: 0.6em 1.2em;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Agile Sprint Capacity Planner</h1>
+    <p>Visualize and plan team capacity directly from Asana</p>
+  </header>
+
+  <nav>
+    <button class="tab active" data-tab="capacity">Capacity Chart</button>
+    <button class="tab" data-tab="support">Support Overview</button>
+  </nav>
+
+  <main>
+    <!-- Capacity Chart Section -->
+    <div id="capacity" class="section active">
+      <div class="input-group">
+        <label>Sprint Number:</label>
+        <input id="sprint-number" value="Sprint 12"/>
+      </div>
+      <div class="input-group">
+        <label>Sprint Duration (days):</label>
+        <input type="number" id="sprint-duration" value="30"/>
+      </div>
+      <div class="input-group">
+        <label>Total Working Days:</label>
+        <input type="number" id="total-days" value="20"/>
+      </div>
+      <div class="input-group">
+        <label>Asana Personal Token:</label>
+        <input id="asana-token" placeholder="Enter your personal token" />
+      </div>
+      <button id="sync-button">Sync with Asana</button>
+
+      <table id="capacity-table">
+        <thead>
+          <tr>
+            <th>Team Member</th>
+            <th>Capacity %</th>
+            <th>Available Days</th>
+            <th>Status</th>
+            <th>Sprint Goals</th>
+            <th>Support Needed</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <div class="bar-chart" id="capacity-bars"></div>
+    </div>
+
+    <!-- Support Overview Section -->
+    <div id="support" class="section">
+      <div class="support-columns">
+        <div class="support-column">
+          <h3>Needs Support</h3>
+          <ul id="support-needed-list"></ul>
+        </div>
+        <div class="support-column">
+          <h3>Under Capacity</h3>
+          <ul id="under-capacity-list"></ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const TSHIRT_SIZES = { 'XS': 1, 'S': 2, 'M': 5, 'L': 8, 'XL': 9 };
+
+    const tabs = document.querySelectorAll('.tab');
+    const sections = document.querySelectorAll('.section');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        sections.forEach(s => s.classList.remove('active'));
+
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
+    });
+
+    function saveToStorage(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    function loadFromStorage(key, defaultVal = {}) {
+      return JSON.parse(localStorage.getItem(key)) || defaultVal;
+    }
+
+    document.getElementById('sync-button').addEventListener('click', async () => {
+      const token = document.getElementById('asana-token').value;
+      if (!token) return alert('Please enter your Asana personal token.');
+
+      const projectId = 'ASANA_PROJECT_ID'; // <-- Replace this
+      const response = await fetch(`https://app.asana.com/api/1.0/projects/${projectId}/tasks?opt_fields=name,assignee.name,custom_fields`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      const json = await response.json();
+      const tasks = json.data;
+
+      const members = {};
+      tasks.forEach(task => {
+        const name = task.assignee?.name || 'Unassigned';
+        const tshirt = task.custom_fields.find(f => f.name.toLowerCase().includes('t-shirt'))?.display_value || 'M';
+        const size = TSHIRT_SIZES[tshirt] || 5;
+
+        if (!members[name]) members[name] = { goals: [], total: 0 };
+        members[name].total += size;
+        members[name].goals.push(task.name);
+      });
+
+      renderCapacityTable(members);
+    });
+
+    function renderCapacityTable(members) {
+      const tbody = document.querySelector('#capacity-table tbody');
+      tbody.innerHTML = '';
+      const barChart = document.getElementById('capacity-bars');
+      barChart.innerHTML = '';
+
+      const totalDays = parseInt(document.getElementById('total-days').value, 10);
+      const supportData = loadFromStorage('supportData');
+      const capacityData = {};
+
+      Object.entries(members).forEach(([member, data]) => {
+        const stored = loadFromStorage(member);
+        const available = stored.availableDays || totalDays;
+        const support = stored.support || '';
+        const percent = Math.round((data.total / available) * 100);
+        const statusClass = percent < 90 ? 'status-green' : percent <= 105 ? 'status-yellow' : 'status-red';
+        const statusText = percent < 90 ? 'Under Capacity' : percent <= 105 ? 'At Capacity' : 'Over Capacity';
+
+        const tr = document.createElement('tr');
+        tr.className = statusClass;
+
+        tr.innerHTML = `
+          <td>${member}</td>
+          <td>${percent}%</td>
+          <td><input type="number" value="${available}" onchange="saveToStorage('${member}', { availableDays: this.value, support: document.getElementById('support-${member}').value })"/></td>
+          <td>${statusText}</td>
+          <td>${data.goals.join(', ')}</td>
+          <td><input id="support-${member}" value="${support}" onchange="saveToStorage('${member}', { availableDays: document.querySelector('#capacity-table tbody').querySelectorAll('tr').namedItem('${member}').querySelector('input').value, support: this.value })"/></td>
+        `;
+
+        tbody.appendChild(tr);
+
+        // Bar chart
+        const bar = document.createElement('div');
+        bar.className = 'bar';
+        const barInner = document.createElement('div');
+        barInner.className = `bar-inner ${statusClass.split('-')[1]}`;
+        barInner.style.height = `${Math.min(percent, 120)}px`;
+        bar.appendChild(barInner);
+        barChart.appendChild(bar);
+
+        capacityData[member] = { percent, support };
+      });
+
+      saveToStorage('supportData', capacityData);
+      renderSupportOverview();
+    }
+
+    function renderSupportOverview() {
+      const data = loadFromStorage('supportData');
+      const needSupportList = document.getElementById('support-needed-list');
+      const underCapList = document.getElementById('under-capacity-list');
+
+      needSupportList.innerHTML = '';
+      underCapList.innerHTML = '';
+
+      Object.entries(data).forEach(([member, info]) => {
+        if (info.support) {
+          const li = document.createElement('li');
+          li.textContent = `${member}: ${info.support}`;
+          needSupportList.appendChild(li);
+        }
+
+        if (info.percent < 90) {
+          const li = document.createElement('li');
+          li.textContent = `${member} (${info.percent}%)`;
+          underCapList.appendChild(li);
+        }
+      });
+    }
+
+    // Restore data on load
+    window.onload = () => {
+      const inputs = ['sprint-number', 'sprint-duration', 'total-days'];
+      inputs.forEach(id => {
+        const el = document.getElementById(id);
+        const saved = localStorage.getItem(id);
+        if (saved) el.value = saved;
+        el.addEventListener('change', () => localStorage.setItem(id, el.value));
+      });
+    };
+  </script>
+</body>
+</html>
