@@ -28,7 +28,7 @@
     .header {
       background: var(--brand-blue);
       color: var(--brand-white);
-      padding: 3rem 1rem 2rem 1rem;
+      padding: 3rem 1rem 4rem 1rem;
       text-align: center;
     }
     .header h1 {
@@ -70,9 +70,9 @@
       flex-wrap: wrap;
       gap: 1rem;
       justify-content: center;
-      margin: -2.5rem 0 2rem 0;
+      margin: -3rem 0 3rem 0;
       position: relative;
-      z-index: 2;
+      z-index: 10;
     }
     .action-btn {
       display: flex;
@@ -88,8 +88,8 @@
       box-shadow: 0 2px 8px rgba(26,35,183,0.07);
     }
     .btn-orange { background: var(--brand-orange); color: var(--brand-white); }
-    .btn-green { background: var(--brand-green); color: var(--brand-white); }
-    .btn-purple { background: var(--brand-purple); color: var(--brand-white); }
+    .btn-green { background: rgba(255, 230, 0, 0.2); color: #b68900; border: 2px solid rgba(255, 230, 0, 0.4); }
+    .btn-purple { background: rgba(255, 230, 0, 0.2); color: #b68900; border: 2px solid rgba(255, 230, 0, 0.4); }
     .btn-yellow { background: var(--brand-yellow); color: #222; }
     .btn-gray { background: var(--brand-gray); color: var(--brand-white); }
     .action-btn:focus { outline: 2px solid var(--brand-yellow); outline-offset: 2px; }
@@ -119,7 +119,7 @@
       background: var(--brand-white);
     }
     .main-content {
-      max-width: 1100px;
+      max-width: 100%;
       margin: 0 auto;
       padding: 0 1.5rem 3rem 1.5rem;
     }
@@ -129,7 +129,7 @@
       box-shadow: 0 2px 12px rgba(26,35,183,0.06);
       padding: 3rem 2rem;
       margin: 2rem auto;
-      max-width: 1100px;
+      max-width: 100%;
       text-align: center;
       color: var(--brand-gray);
       font-size: 1.15rem;
@@ -154,7 +154,7 @@
       display: flex;
       gap: 2rem;
       margin: 2rem auto;
-      max-width: 900px;
+      max-width: 100%;
       justify-content: center;
       flex-wrap: wrap;
     }
@@ -303,6 +303,102 @@
       .card { padding: 2rem 0.5rem; }
       #admin-config { padding: 1rem 0.5rem; min-width: 0; }
     }
+    .goal-tag {
+      display: inline-block;
+      background: #e6edfd;
+      color: #1741b6;
+      font-size: 0.93em;
+      font-weight: 600;
+      border-radius: 0.5em;
+      padding: 0.1em 0.7em;
+      margin-left: 0.3em;
+      margin-right: 0.1em;
+    }
+    .support-dropdown {
+      width: 100%;
+      padding: 0.3em;
+      border: 1px solid #ddd;
+      border-radius: 0.3em;
+      min-height: 60px;
+      font-size: 0.9em;
+      background: #fff;
+    }
+    .support-dropdown:focus {
+      outline: 2px solid var(--brand-blue);
+      outline-offset: 2px;
+      border-color: var(--brand-blue);
+    }
+    .support-dropdown option {
+      padding: 0.2em 0.5em;
+    }
+    .support-dropdown option:checked {
+      background: var(--brand-blue);
+      color: white;
+    }
+    /* Table Styles */
+    .capacity-table { 
+      border-radius: 1rem; 
+      overflow: hidden; 
+      font-size: 1.05rem; 
+      width: 100%;
+      max-width: 100%;
+      table-layout: auto;
+    }
+    .capacity-table th.th-main {
+      background: #1741b6;
+      color: #fff;
+      font-weight: 700;
+      padding: 1em 0.7em;
+      text-align: left;
+      border-top-left-radius: 0.7em;
+      border-top-right-radius: 0.7em;
+      border-bottom: 2px solid #e5e7eb;
+      white-space: nowrap;
+      min-width: 120px;
+    }
+    .capacity-table th.th-main:not(:first-child) { border-top-left-radius: 0; }
+    .capacity-table th.th-main:not(:last-child) { border-top-right-radius: 0; }
+    .capacity-table td.td-main {
+      padding: 1em 0.7em;
+      vertical-align: top;
+      background: #fff;
+      border-bottom: 1px solid #f1f3f7;
+      font-size: 1.05rem;
+      word-wrap: break-word;
+      max-width: 300px;
+    }
+    .capacity-table tr.even td { background: #f8fafc; }
+    .capacity-table tr.odd td { background: #fff; }
+    .capacity-table td.left { text-align: left; }
+    .capacity-table td.center { text-align: center; }
+    .capacity-table td:nth-child(5) { /* Sprint Goals column */
+      max-width: 400px;
+      min-width: 200px;
+    }
+    .capacity-table td:nth-child(6) { /* Support Needed column */
+      min-width: 150px;
+    }
+    .status-badge {
+      display: inline-block;
+      padding: 0.35em 1.1em;
+      border-radius: 1.2em;
+      font-size: 1em;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      background: #fff0f0;
+      color: #c92a2a;
+      white-space: nowrap;
+    }
+    .support-badge {
+      display: inline-block;
+      padding: 0.3em 1em;
+      border-radius: 1em;
+      font-size: 1em;
+      font-weight: 600;
+      margin-top: 0.1em;
+    }
+    .support-yellow { background: #fffbe6; color: #b68900; }
+    .support-gray { background: #f1f3f7; color: #888; }
   </style>
 </head>
 <body>
@@ -316,11 +412,8 @@
     </div>
   </div>
   <div class="actions">
-    <button class="action-btn btn-orange" id="edit-goals-btn"><span>✏️</span> Edit My Goals</button>
     <button class="action-btn btn-green" id="sync-button"><span>🔄</span> Sync with Asana</button>
-    <button class="action-btn btn-purple" id="guide-btn"><span>📖</span> Definitions & Guide</button>
-    <button class="action-btn btn-yellow" id="archive-btn"><span>🗂️</span> Archive & New Sprint</button>
-    <button class="action-btn btn-gray" id="export-btn"><span>⬇️</span> Export Data</button>
+    <button class="action-btn btn-purple" id="guide-btn"><span>📖</span> Setup Guide</button>
   </div>
   <div class="main-content">
     <div class="tabs">
@@ -367,23 +460,95 @@
     </div>
     <button class="clear-btn" id="clear-settings-button">Clear All Settings</button>
   </div>
+  <!-- Guide Popup Modal -->
+  <div id="guide-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; overflow-y: auto;">
+    <div style="background: var(--brand-white); margin: 2rem auto; max-width: 600px; border-radius: 1rem; box-shadow: 0 8px 32px rgba(26,35,183,0.15); position: relative;">
+      <button id="close-guide" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; color: var(--brand-blue); cursor: pointer; padding: 0.5rem;">×</button>
+      <div style="padding: 2rem;">
+        <h2 style="color: var(--brand-blue); margin-top: 0; margin-bottom: 1.5rem; font-size: 1.5rem;">📖 Setup Guide</h2>
+        
+        <div style="margin-bottom: 2rem;">
+          <h3 style="color: #222; margin-bottom: 1rem;">🔑 Getting Your Asana Personal Access Token</h3>
+          <ol style="line-height: 1.6; color: #444;">
+            <li>Go to <a href="https://app.asana.com/0/developer-console" target="_blank" style="color: var(--brand-blue);">Asana Developer Console</a></li>
+            <li>Click "Create new personal access token"</li>
+            <li>Give it a name (e.g., "Capacity Planner")</li>
+            <li>Copy the generated token (you'll only see it once!)</li>
+            <li>Press <strong>Ctrl+Shift+A</strong> to open the admin panel</li>
+            <li>Paste your token in the "Asana Personal Token" field</li>
+          </ol>
+        </div>
+
+        <div style="margin-bottom: 2rem;">
+          <h3 style="color: #222; margin-bottom: 1rem;">📋 Finding Your Project ID</h3>
+          <ol style="line-height: 1.6; color: #444;">
+            <li>Open your Asana project in the browser</li>
+            <li>Look at the URL: <code style="background: #f1f3f7; padding: 0.2rem 0.4rem; border-radius: 0.3rem;">https://app.asana.com/0/PROJECT_ID/list</code></li>
+            <li>Copy the PROJECT_ID number from the URL</li>
+            <li>In the admin panel, paste it in the "Default Asana Project ID" field</li>
+          </ol>
+        </div>
+
+        <div style="margin-bottom: 2rem;">
+          <h3 style="color: #222; margin-bottom: 1rem;">⚙️ Sprint Configuration</h3>
+          <ul style="line-height: 1.6; color: #444;">
+            <li><strong>Sprint Duration:</strong> Each sprint is 30 days long</li>
+            <li><strong>Available Days:</strong> Each team member can edit their available days (out of 30) in the capacity chart</li>
+            <li><strong>Capacity Buffer:</strong> A 15% buffer is automatically applied to account for meetings, interruptions, and unexpected work</li>
+          </ul>
+        </div>
+
+        <div style="background: #f8fafc; padding: 1rem; border-radius: 0.5rem; border-left: 4px solid var(--brand-blue);">
+          <h4 style="margin-top: 0; color: var(--brand-blue);">💡 Pro Tips</h4>
+          <ul style="margin-bottom: 0; color: #444;">
+            <li>Use t-shirt sizes (XS, S, M, L, XL) in your Asana tasks for automatic capacity calculation</li>
+            <li>Select support needs from the dropdown: None, Admin help, Thinking Partner, Coworking Partner, Strategy or Feedback, or Leadership Support</li>
+            <li>You can select multiple support options for each team member</li>
+            <li>Export your data regularly to keep backups of your capacity planning</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
   <script>
     // --- UI Tab Logic ---
     const tabCapacity = document.getElementById('tab-capacity');
     const tabSupport = document.getElementById('tab-support');
     const capacitySection = document.getElementById('capacity-section');
     const supportSection = document.getElementById('support-section');
-    tabCapacity.addEventListener('click', () => {
-      tabCapacity.classList.add('active');
-      tabSupport.classList.remove('active');
-      capacitySection.style.display = '';
-      supportSection.style.display = 'none';
-    });
-    tabSupport.addEventListener('click', () => {
-      tabSupport.classList.add('active');
-      tabCapacity.classList.remove('active');
-      supportSection.style.display = '';
-      capacitySection.style.display = 'none';
+    
+    // Consolidated tab switching function
+    function switchTab(activeTab, activeSection, inactiveTab, inactiveSection) {
+      activeTab.classList.add('active');
+      inactiveTab.classList.remove('active');
+      activeSection.style.display = '';
+      inactiveSection.style.display = 'none';
+    }
+    
+    tabCapacity.addEventListener('click', () => switchTab(tabCapacity, capacitySection, tabSupport, supportSection));
+    tabSupport.addEventListener('click', () => switchTab(tabSupport, supportSection, tabCapacity, capacitySection));
+
+    // --- Guide Modal Logic ---
+    const guideModal = document.getElementById('guide-modal');
+    const guideBtn = document.getElementById('guide-btn');
+    const closeGuide = document.getElementById('close-guide');
+    
+    function showGuide() {
+      guideModal.style.display = 'block';
+      document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+    
+    function hideGuide() {
+      guideModal.style.display = 'none';
+      document.body.style.overflow = ''; // Restore scrolling
+    }
+    
+    guideBtn.addEventListener('click', showGuide);
+    closeGuide.addEventListener('click', hideGuide);
+    
+    // Close guide when clicking outside
+    guideModal.addEventListener('click', (e) => {
+      if (e.target === guideModal) hideGuide();
     });
 
     // --- Admin Config Panel Logic ---
@@ -407,10 +572,23 @@
 
     // --- Storage Helpers ---
     function saveToStorage(key, value) {
-      try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) { console.error(e); }
+      try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) { console.error('Storage error:', e); }
     }
     function loadFromStorage(key, defaultVal = {}) {
       try { const item = localStorage.getItem(key); return item ? JSON.parse(item) : defaultVal; } catch (e) { return defaultVal; }
+    }
+
+    // --- Utility Functions ---
+    function calculateCapacityPercentage(total, available) {
+      // Apply 15% buffer to account for meetings, interruptions, and unexpected work
+      const bufferedAvailable = available * 0.85; // 15% buffer
+      return ((total / bufferedAvailable) * 100).toFixed(1);
+    }
+    
+    function getCapacityStatus(percent) {
+      if (percent < 90) return { text: 'UNDER CAPACITY', color: '#22c55e', bg: '#e6fbe6' };
+      if (percent <= 105) return { text: 'AT CAPACITY', color: '#ffc107', bg: '#fffbe6' };
+      return { text: 'OVER CAPACITY', color: '#dc3545', bg: '#ffeaea' };
     }
 
     // --- Admin Config Functionality ---
@@ -499,6 +677,24 @@
 
     // --- Asana Integration & Data Logic ---
     const TSHIRT_SIZES = { 'XS': 1, 'S': 2, 'M': 5, 'L': 8, 'XL': 10 };
+    
+    // Ensure sync button exists and attach event listener
+    function setupSyncButton() {
+      const syncButton = document.getElementById('sync-button');
+      if (syncButton) {
+        console.log('Sync button found, setting up event listener');
+        // Test if the button is clickable
+        syncButton.addEventListener('click', function(e) {
+          console.log('Sync button clicked via addEventListener');
+          e.preventDefault();
+          syncWithAsana();
+        });
+        console.log('Sync button event listener attached successfully');
+      } else {
+        console.error('Sync button not found - this is the problem!');
+      }
+    }
+    
     function getProjectIdFromSprint(sprintName) {
       const projectMappings = loadFromStorage('projectMappings', {});
       if (projectMappings[sprintName]) return projectMappings[sprintName];
@@ -510,28 +706,59 @@
       }
       return localStorage.getItem('defaultProjectId') || '';
     }
+    
     // Sync with Asana
-    document.getElementById('sync-button').onclick = async () => {
+    async function syncWithAsana() {
+      console.log('Sync button clicked');
       const sprintName = prompt('Enter Sprint Name/Number:', localStorage.getItem('lastSprint') || '');
-      if (!sprintName) return;
-      localStorage.setItem('lastSprint', sprintName);
-      document.getElementById('sprint-title').textContent = sprintName + ' Capacity Planner';
-      // Optionally update info bar here
-      const token = localStorage.getItem('asana-token');
-      const projectId = getProjectIdFromSprint(sprintName);
-      if (!token || !projectId) {
-        alert('Asana integration not configured. Press Ctrl+Shift+A to configure.');
+      if (!sprintName) {
+        console.log('No sprint name entered');
         return;
       }
+      console.log('Sprint name:', sprintName);
+      
+      localStorage.setItem('lastSprint', sprintName);
+      document.getElementById('sprint-title').textContent = sprintName + ' Capacity Planner';
+      
+      const token = localStorage.getItem('asana-token');
+      const projectId = getProjectIdFromSprint(sprintName);
+      
+      console.log('Token exists:', !!token);
+      console.log('Project ID:', projectId);
+      
+      if (!token || !projectId) {
+        alert('Asana integration not configured. Press Ctrl+Shift+A to configure.');
+        console.log('Missing token or project ID');
+        return;
+      }
+      
+      // Show loading state
+      const syncButton = document.getElementById('sync-button');
+      const originalText = syncButton.innerHTML;
+      syncButton.innerHTML = '<span>⏳</span> Syncing...';
+      syncButton.disabled = true;
+      
       // Fetch Asana tasks
       try {
+        console.log('Fetching tasks from Asana...');
         const tasksResponse = await fetch(
           `https://app.asana.com/api/1.0/projects/${projectId}/tasks?opt_fields=name,assignee.name,custom_fields,notes`,
           { headers: { 'Authorization': `Bearer ${token}` } }
         );
-        if (!tasksResponse.ok) throw new Error('Failed to fetch tasks.');
+        
+        console.log('Response status:', tasksResponse.status);
+        
+        if (!tasksResponse.ok) {
+          const errorText = await tasksResponse.text();
+          console.error('Asana API error:', errorText);
+          throw new Error(`Failed to fetch tasks. Status: ${tasksResponse.status}`);
+        }
+        
         const tasksData = await tasksResponse.json();
         const tasks = tasksData.data;
+        
+        console.log('Tasks fetched:', tasks.length);
+        
         // Process tasks
         const members = {};
         tasks.forEach(task => {
@@ -549,18 +776,122 @@
           }
           // If still not found, default to zero days
           const size = tshirtSize && TSHIRT_SIZES[tshirtSize] ? TSHIRT_SIZES[tshirtSize] : 0;
-          if (!members[name]) members[name] = { goals: [], total: 0, support: '', available: 22 };
+          if (!members[name]) members[name] = { goals: [], total: 0, support: ['None'], available: 30 };
           members[name].total += size;
           members[name].goals.push(task.name);
         });
+        
+        console.log('Processed members:', Object.keys(members));
+        
         // Save and render
         saveToStorage('capacityData', members);
         renderCapacityTable(members);
         renderSupportOverview(members);
+        
+        // Show success message
+        alert(`Successfully synced ${Object.keys(members).length} team members with ${tasks.length} tasks.`);
+        
       } catch (e) {
+        console.error('Sync error:', e);
         alert('Sync failed: ' + e.message);
+      } finally {
+        // Restore button state
+        syncButton.innerHTML = originalText;
+        syncButton.disabled = false;
       }
     };
+
+    // --- UI Bar Chart and Alerts Logic ---
+    function renderCapacityBarChart(members) {
+      const containerId = 'capacity-bar-chart';
+      let container = document.getElementById(containerId);
+      if (!container) {
+        container = document.createElement('div');
+        container.id = containerId;
+        container.style.margin = '0 auto';
+        container.style.maxWidth = '100%';
+        container.style.background = '#fff';
+        container.style.borderRadius = '1.25rem';
+        container.style.boxShadow = '0 2px 12px rgba(26,35,183,0.06)';
+        container.style.padding = '1rem 1.5rem';
+        container.style.textAlign = 'center';
+        container.style.display = 'block';
+        container.style.position = 'relative';
+        container.style.minHeight = '200px';
+        document.getElementById('capacity-section').appendChild(container);
+      }
+      let html = `<h2 style="font-size:1.5rem;font-weight:700;color:#222;margin-bottom:1rem;">Team Capacity Overview</h2><div style="display:flex;gap:0.8rem;justify-content:center;align-items:end;min-height:150px;flex-wrap:wrap;">`;
+      if (!members || Object.keys(members).length === 0) {
+        html += '<div style="color:#888;font-size:1.1rem;">No data to display.</div>';
+      } else {
+        Object.entries(members).forEach(([member, data]) => {
+          const available = data.available || 30;
+          const percent = calculateCapacityPercentage(data.total, available);
+          const status = getCapacityStatus(parseFloat(percent));
+          let barColor = status.color;
+          let labelBg = status.bg;
+          let labelColor = status.color;
+          html += `<div style="display:flex;flex-direction:column;align-items:center;gap:0.3em;min-width:35px;">
+            <div style="background:${labelBg};color:${labelColor};font-weight:700;font-size:0.9em;padding:0.1em 0.5em;border-radius:0.5em;margin-bottom:0.2em;">${percent}%</div>
+            <div style="width:28px;height:${Math.min(parseFloat(percent),150)}px;background:${barColor};border-radius:0.5em 0.5em 0 0;box-shadow:0 2px 8px rgba(0,0,0,0.07);"></div>
+            <div style="font-size:0.85em;font-weight:600;color:#222;margin-top:0.3em;text-align:center;line-height:1.1;">${member.split(' ')[0]}</div>
+          </div>`;
+        });
+      }
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
+    // --- UI Alerts Logic ---
+    function renderAlerts(members) {
+      // Remove old alerts
+      const oldAlerts = document.querySelectorAll('.alert-banner');
+      oldAlerts.forEach(el => el.remove());
+      if (!members || Object.keys(members).length === 0) return;
+      // Capacity overload alert
+      const overload = Object.entries(members).filter(([_, d]) => ((d.total/(d.available||30))*100) > 105);
+      if (overload.length > 0) {
+        const alert = document.createElement('div');
+        alert.className = 'alert-banner';
+        alert.style.background = '#ffeaea';
+        alert.style.color = '#c92a2a';
+        alert.style.fontWeight = '600';
+        alert.style.padding = '1.1em 1.5em';
+        alert.style.borderRadius = '0.7em';
+        alert.style.margin = '1.5em auto 0 auto';
+        alert.style.maxWidth = '1100px';
+        alert.style.display = 'flex';
+        alert.style.alignItems = 'center';
+        alert.style.gap = '0.7em';
+        alert.innerHTML = `<span style="font-size:1.3em;">🚨</span> Capacity overload: ${overload.map(([n,d])=>`${n} (${((d.total/(d.available||30))*100).toFixed(1)}%)`).join(', ')}`;
+        document.querySelector('.main-content').insertBefore(alert, document.getElementById('capacity-section'));
+      }
+      // Support needed alert
+      const support = Object.entries(members).filter(([_, d]) => {
+        if (!d.support) return false;
+        if (Array.isArray(d.support)) {
+          return d.support.length > 0 && !(d.support.length === 1 && d.support[0] === 'None');
+        }
+        return d.support.trim() && d.support.trim().toLowerCase() !== 'none';
+      });
+      if (support.length > 0) {
+        const alert = document.createElement('div');
+        alert.className = 'alert-banner';
+        alert.style.background = '#fffbe6';
+        alert.style.color = '#b68900';
+        alert.style.fontWeight = '600';
+        alert.style.padding = '1.1em 1.5em';
+        alert.style.borderRadius = '0.7em';
+        alert.style.margin = '1em auto 0 auto';
+        alert.style.maxWidth = '1100px';
+        alert.style.display = 'flex';
+        alert.style.alignItems = 'center';
+        alert.style.gap = '0.7em';
+        alert.innerHTML = `<span style="font-size:1.3em;">⚠️🤝</span> ${support.length} team member(s) need support this sprint`;
+        document.querySelector('.main-content').insertBefore(alert, document.getElementById('capacity-section'));
+      }
+    }
+
     // Render Capacity Table
     function renderCapacityTable(members) {
       const card = document.getElementById('capacity-card');
@@ -583,15 +914,33 @@
         <tbody>`;
       let rowIdx = 0;
       Object.entries(members).forEach(([member, data]) => {
-        const available = data.available || 22;
-        const percent = ((data.total / available) * 100).toFixed(1);
-        let status = percent < 90 ? 'MODERATE' : percent <= 105 ? 'AT CAPACITY' : 'AT CAPACITY';
-        let statusColor = percent < 90 ? '#ffe600' : percent <= 105 ? '#ffb800' : '#ffb8b8';
-        let statusTextColor = percent < 90 ? '#b68900' : percent <= 105 ? '#b68900' : '#c92a2a';
-        let statusBg = percent < 90 ? '#fffbe6' : percent <= 105 ? '#fffbe6' : '#fff0f0';
-        let supportBadge = data.support && data.support.trim() && data.support.trim().toLowerCase() !== 'none'
-          ? `<span class="support-badge support-yellow">${data.support}</span>`
-          : `<span class="support-badge support-gray">None</span>`;
+        const available = data.available || 30;
+        const percent = calculateCapacityPercentage(data.total, available);
+        const status = getCapacityStatus(parseFloat(percent));
+        let statusColor = status.color;
+        let statusBg = status.bg;
+        let statusTextColor = status.color;
+        // Handle support data (now an array) for the dropdown
+        let supportBadge = '';
+        if (data.support) {
+          if (Array.isArray(data.support)) {
+            const supportText = data.support.join(', ');
+            if (supportText && supportText.toLowerCase() !== 'none') {
+              supportBadge = `<span class="support-badge support-yellow">${supportText}</span>`;
+            } else {
+              supportBadge = `<span class="support-badge support-gray">None</span>`;
+            }
+          } else {
+            // Handle legacy string format
+            if (data.support.trim && data.support.trim().toLowerCase() !== 'none') {
+              supportBadge = `<span class="support-badge support-yellow">${data.support}</span>`;
+            } else {
+              supportBadge = `<span class="support-badge support-gray">None</span>`;
+            }
+          }
+        } else {
+          supportBadge = `<span class="support-badge support-gray">None</span>`;
+        }
         // Sprint goals with tags
         let goalsHtml = '';
         if (data.goals && data.goals.length > 0) {
@@ -607,13 +956,33 @@
         }
         html += `<tr class="tr-row${rowIdx % 2 === 0 ? ' even' : ' odd'}">
           <td class="td-main left">${member}</td>
-          <td class="td-main left">${available}/22</td>
+          <td class="td-main left">
+            <input type="number" 
+                   value="${available}" 
+                   min="1" 
+                   max="30" 
+                   style="width: 60px; padding: 0.3em; border: 1px solid #ddd; border-radius: 0.3em; text-align: center;"
+                   onchange="updateAvailableDays('${member}', this.value)"
+                   aria-label="Available days for ${member}"> / 30
+          </td>
           <td class="td-main center"><strong>${percent}%</strong></td>
           <td class="td-main center">
-            <span class="status-badge" style="background:${statusBg};color:${statusTextColor};">${status}</span>
+            <span class="status-badge" style="background:${statusBg};color:${statusTextColor};" aria-label="Capacity status: ${status.text}">${status.text}</span>
           </td>
           <td class="td-main left">${goalsHtml}</td>
-          <td class="td-main left">${supportBadge}</td>
+          <td class="td-main left">
+            <select multiple 
+                    class="support-dropdown"
+                    onchange="updateSupport('${member}', this)"
+                    aria-label="Support needed for ${member}">
+              <option value="None" ${(!data.support || (Array.isArray(data.support) && data.support.includes('None')) || (!Array.isArray(data.support) && data.support === 'None')) ? 'selected' : ''}>None</option>
+              <option value="Admin help" ${(data.support && Array.isArray(data.support) && data.support.includes('Admin help')) ? 'selected' : ''}>Admin help</option>
+              <option value="Thinking Partner" ${(data.support && Array.isArray(data.support) && data.support.includes('Thinking Partner')) ? 'selected' : ''}>Thinking Partner</option>
+              <option value="Coworking Partner" ${(data.support && Array.isArray(data.support) && data.support.includes('Coworking Partner')) ? 'selected' : ''}>Coworking Partner</option>
+              <option value="Strategy or Feedback" ${(data.support && Array.isArray(data.support) && data.support.includes('Strategy or Feedback')) ? 'selected' : ''}>Strategy or Feedback</option>
+              <option value="Leadership Support" ${(data.support && Array.isArray(data.support) && data.support.includes('Leadership Support')) ? 'selected' : ''}>Leadership Support</option>
+            </select>
+          </td>
         </tr>`;
         rowIdx++;
       });
@@ -622,80 +991,29 @@
       renderAlerts(members);
       renderCapacityBarChart(members);
     }
-    // Add table styles
-    const style = document.createElement('style');
-    style.textContent = `
-      .capacity-table { border-radius: 1rem; overflow: hidden; font-size: 1.05rem; }
-      .capacity-table th.th-main {
-        background: #1741b6;
-        color: #fff;
-        font-weight: 700;
-        padding: 1em 0.7em;
-        text-align: left;
-        border-top-left-radius: 0.7em;
-        border-top-right-radius: 0.7em;
-        border-bottom: 2px solid #e5e7eb;
-      }
-      .capacity-table th.th-main:not(:first-child) { border-top-left-radius: 0; }
-      .capacity-table th.th-main:not(:last-child) { border-top-right-radius: 0; }
-      .capacity-table td.td-main {
-        padding: 1em 0.7em;
-        vertical-align: top;
-        background: #fff;
-        border-bottom: 1px solid #f1f3f7;
-        font-size: 1.05rem;
-      }
-      .capacity-table tr.even td { background: #f8fafc; }
-      .capacity-table tr.odd td { background: #fff; }
-      .capacity-table td.left { text-align: left; }
-      .capacity-table td.center { text-align: center; }
-      .status-badge {
-        display: inline-block;
-        padding: 0.35em 1.1em;
-        border-radius: 1.2em;
-        font-size: 1em;
-        font-weight: 600;
-        letter-spacing: 0.01em;
-        background: #fff0f0;
-        color: #c92a2a;
-      }
-      .support-badge {
-        display: inline-block;
-        padding: 0.3em 1em;
-        border-radius: 1em;
-        font-size: 1em;
-        font-weight: 600;
-        margin-top: 0.1em;
-      }
-      .support-yellow { background: #fffbe6; color: #b68900; }
-      .support-gray { background: #f1f3f7; color: #888; }
-      .goal-tag {
-        display: inline-block;
-        background: #e6edfd;
-        color: #1741b6;
-        font-size: 0.93em;
-        font-weight: 600;
-        border-radius: 0.5em;
-        padding: 0.1em 0.7em;
-        margin-left: 0.3em;
-        margin-right: 0.1em;
-      }
-    `;
-    document.head.appendChild(style);
     // Expose update functions for inline inputs
     window.updateAvailableDays = function(member, value) {
       const members = loadFromStorage('capacityData', {});
       if (members[member]) {
-        members[member].available = parseInt(value, 10) || 20;
+        members[member].available = parseInt(value, 10) || 30;
         saveToStorage('capacityData', members);
         renderCapacityTable(members);
         renderSupportOverview(members);
       }
     };
-    window.updateSupport = function(member, value) {
+    window.updateSupport = function(member, selectElement) {
       const members = loadFromStorage('capacityData', {});
       if (members[member]) {
-        members[member].support = value;
+        const selectedOptions = Array.from(selectElement.selectedOptions).map(option => option.value);
+        // If "None" is selected along with other options, remove "None"
+        if (selectedOptions.includes('None') && selectedOptions.length > 1) {
+          const filteredOptions = selectedOptions.filter(option => option !== 'None');
+          members[member].support = filteredOptions;
+          // Update the select element to reflect the change
+          selectElement.querySelector('option[value="None"]').selected = false;
+        } else {
+          members[member].support = selectedOptions;
+        }
         saveToStorage('capacityData', members);
         renderCapacityTable(members);
         renderSupportOverview(members);
@@ -710,15 +1028,17 @@
       underList.innerHTML = '';
       let hasOver = false, hasUnder = false;
       Object.entries(members).forEach(([member, data]) => {
-        const available = data.available || 20;
-        const percent = Math.round((data.total / available) * 100);
-        if (percent > 105) {
+        const available = data.available || 30;
+        const percent = calculateCapacityPercentage(data.total, available);
+        const status = getCapacityStatus(parseFloat(percent));
+        if (status.text === 'OVER CAPACITY') {
           const li = document.createElement('li');
-          li.innerHTML = `<strong>${member}</strong> <span style="color:#dc3545;font-weight:600;">(${percent}%)</span><br><span style="font-size:0.95em;">${data.support||''}</span>`;
+          const supportText = Array.isArray(data.support) ? data.support.join(', ') : (data.support || '');
+          li.innerHTML = `<strong>${member}</strong> <span style="color:#dc3545;font-weight:600;">(${percent}%)</span><br><span style="font-size:0.95em;">${supportText}</span>`;
           overList.appendChild(li);
           hasOver = true;
         }
-        if (percent < 90) {
+        if (status.text === 'UNDER CAPACITY') {
           const li = document.createElement('li');
           li.innerHTML = `<strong>${member}</strong> <span style="color:#22c55e;font-weight:600;">(${percent}%)</span>`;
           underList.appendChild(li);
@@ -737,91 +1057,10 @@
         renderCapacityTable(members);
         renderSupportOverview(members);
       }
+      
+      // Setup sync button
+      setupSyncButton();
     };
-
-    // --- UI Bar Chart and Alerts Logic ---
-    function renderCapacityBarChart(members) {
-      const containerId = 'capacity-bar-chart';
-      let container = document.getElementById(containerId);
-      if (!container) {
-        container = document.createElement('div');
-        container.id = containerId;
-        container.style.margin = '2.5rem auto 0 auto';
-        container.style.maxWidth = '900px';
-        container.style.background = '#fff';
-        container.style.borderRadius = '1.25rem';
-        container.style.boxShadow = '0 2px 12px rgba(26,35,183,0.06)';
-        container.style.padding = '2.5rem 1.5rem 2.5rem 1.5rem';
-        container.style.textAlign = 'center';
-        container.style.display = 'block';
-        container.style.position = 'relative';
-        container.style.minHeight = '320px';
-        document.getElementById('capacity-section').appendChild(container);
-      }
-      let html = `<h2 style="font-size:2rem;font-weight:700;color:#222;margin-bottom:2.5rem;">Team Capacity Overview</h2><div style="display:flex;gap:2.5rem;justify-content:center;align-items:end;min-height:200px;">`;
-      if (!members || Object.keys(members).length === 0) {
-        html += '<div style="color:#888;font-size:1.1rem;">No data to display.</div>';
-      } else {
-        Object.entries(members).forEach(([member, data]) => {
-          const available = data.available || 22;
-          const percent = ((data.total / available) * 100).toFixed(1);
-          let barColor = percent < 90 ? '#22c55e' : percent <= 105 ? '#ffc107' : '#f44336';
-          let labelBg = percent < 90 ? '#e6fbe6' : percent <= 105 ? '#fffbe6' : '#ffeaea';
-          let labelColor = percent < 90 ? '#22c55e' : percent <= 105 ? '#b68900' : '#c92a2a';
-          html += `<div style="display:flex;flex-direction:column;align-items:center;gap:0.5em;">
-            <div style="background:${labelBg};color:${labelColor};font-weight:700;font-size:1.1em;padding:0.2em 0.8em;border-radius:0.7em;margin-bottom:0.3em;">${percent}%</div>
-            <div style="width:48px;height:${Math.min(percent,200)}px;background:${barColor};border-radius:1em 1em 0 0;box-shadow:0 2px 8px rgba(0,0,0,0.07);"></div>
-            <div style="font-size:1em;font-weight:600;color:#222;margin-top:0.5em;">${member.split(' ')[0]}</div>
-          </div>`;
-        });
-      }
-      html += '</div>';
-      container.innerHTML = html;
-    }
-
-    // --- UI Alerts Logic ---
-    function renderAlerts(members) {
-      // Remove old alerts
-      const oldAlerts = document.querySelectorAll('.alert-banner');
-      oldAlerts.forEach(el => el.remove());
-      if (!members || Object.keys(members).length === 0) return;
-      // Capacity overload alert
-      const overload = Object.entries(members).filter(([_, d]) => ((d.total/(d.available||22))*100) > 105);
-      if (overload.length > 0) {
-        const alert = document.createElement('div');
-        alert.className = 'alert-banner';
-        alert.style.background = '#ffeaea';
-        alert.style.color = '#c92a2a';
-        alert.style.fontWeight = '600';
-        alert.style.padding = '1.1em 1.5em';
-        alert.style.borderRadius = '0.7em';
-        alert.style.margin = '1.5em auto 0 auto';
-        alert.style.maxWidth = '1100px';
-        alert.style.display = 'flex';
-        alert.style.alignItems = 'center';
-        alert.style.gap = '0.7em';
-        alert.innerHTML = `<span style="font-size:1.3em;">🚨</span> Capacity overload: ${overload.map(([n,d])=>`${n} (${((d.total/(d.available||22))*100).toFixed(1)}%)`).join(', ')}`;
-        document.querySelector('.main-content').insertBefore(alert, document.getElementById('capacity-section'));
-      }
-      // Support needed alert
-      const support = Object.entries(members).filter(([_, d]) => d.support && d.support.trim() && d.support.trim().toLowerCase() !== 'none');
-      if (support.length > 0) {
-        const alert = document.createElement('div');
-        alert.className = 'alert-banner';
-        alert.style.background = '#fffbe6';
-        alert.style.color = '#b68900';
-        alert.style.fontWeight = '600';
-        alert.style.padding = '1.1em 1.5em';
-        alert.style.borderRadius = '0.7em';
-        alert.style.margin = '1em auto 0 auto';
-        alert.style.maxWidth = '1100px';
-        alert.style.display = 'flex';
-        alert.style.alignItems = 'center';
-        alert.style.gap = '0.7em';
-        alert.innerHTML = `<span style="font-size:1.3em;">⚠️🤝</span> ${support.length} team member(s) need support this sprint`;
-        document.querySelector('.main-content').insertBefore(alert, document.getElementById('capacity-section'));
-      }
-    }
   </script>
 </body>
 </html>

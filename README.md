@@ -4,95 +4,72 @@ A browser-based capacity planning tool that integrates with Asana to visualize a
 
 ## Features
 
-- **Team-Wide Access**: No configuration needed for team members - just enter sprint name and sync
-- **Asana Integration**: Automatic sync with your Asana projects using pre-configured settings
-- **Smart Project Mapping**: Automatically determines which Asana project to use based on sprint name
+- **Asana Integration**: Sync directly with your Asana projects using personal access tokens
 - **Capacity Visualization**: Interactive bar charts showing team member capacity levels
-- **T-shirt Size Mapping**: Automatic conversion of story points to capacity days (XS=1, S=2, M=5, L=8, XL=9)
+- **T-shirt Size Mapping**: Automatic conversion of story points to capacity days (XS=1, S=2, M=5, L=8, XL=10)
+- **15% Capacity Buffer**: Automatically applies a 15% buffer to account for meetings, interruptions, and unexpected work
+- **Editable Available Days**: Each team member can edit their available days (out of 30) directly in the capacity chart
 - **Support Tracking**: Track and manage support needs for team members
+- **Setup Guide**: Built-in popup guide with step-by-step instructions for configuration
 - **Persistent Data**: All user inputs are saved locally in the browser
 - **Responsive Design**: Works seamlessly on desktop and mobile devices
 - **Accessibility**: WCAG 2.2 AA compliant with proper ARIA labels and keyboard navigation
 
 ## Quick Start
 
-### For Team Members (Daily Use)
+### 1. Get Your Asana Personal Access Token
 
-1. **Open the app** - No login or configuration needed
-2. **Enter Sprint Name** - Type your sprint name (e.g., "Sprint 12", "Q1 Sprint 3")
-3. **Click "Sync with Asana"** - Automatically fetches your team's capacity data
-4. **Review & Update** - Adjust available days and add support notes as needed
+1. Go to [Asana Developer Console](https://app.asana.com/0/developer-console)
+2. Click "Create new personal access token"
+3. Give it a name (e.g., "Capacity Planner")
+4. Copy the generated token (you'll only see it once!)
 
-### For Administrators (One-time Setup)
+### 2. Find Your Project ID
 
-1. **Access Admin Panel**: Press `Ctrl+Shift+A` to open admin configuration
-2. **Configure Asana Token**: Enter your Asana personal access token
-3. **Set Project Mappings**: Map sprint patterns to Asana project IDs
-4. **Hide Admin Panel**: Press `Ctrl+Shift+A` again to hide
+1. Open your Asana project in the browser
+2. Look at the URL: `https://app.asana.com/0/PROJECT_ID/list`
+3. Copy the PROJECT_ID number
 
-## Setup Instructions
+### 3. Configure the Tool
 
-### Initial Configuration (Admin Only)
+1. Press **Ctrl+Shift+A** to open the admin configuration panel
+2. Enter your Asana personal token and project ID
+3. Click "📖 Setup Guide" for detailed instructions
 
-1. **Get Asana Personal Access Token**:
-   - Go to [Asana Developer Console](https://app.asana.com/0/developer-console)
-   - Click "Create new personal access token"
-   - Give it a name (e.g., "Capacity Planner")
-   - Copy the generated token
+### 4. Deploy to Vercel
 
-2. **Configure the Tool**:
-   - Open the deployed app
-   - Press `Ctrl+Shift+A` to open admin panel
-   - Enter your Asana token
-   - Set up project mappings (see Project Mapping section below)
-   - Press `Ctrl+Shift+A` to hide admin panel
-
-3. **Deploy to Vercel**:
-   ```bash
-   npm i -g vercel
-   vercel
-   ```
-
-### Project Mapping
-
-The tool automatically determines which Asana project to use based on the sprint name. Configure mappings in the admin panel:
-
-**Examples:**
-- `Sprint *` → Project ID `123456789` (matches all sprints)
-- `Q1 Sprint *` → Project ID `987654321` (matches Q1 sprints)
-- `Sprint 12` → Project ID `555666777` (exact match)
-
-**Pattern Rules:**
-- Use `*` for wildcards
-- Patterns are case-insensitive
-- More specific patterns take precedence
+1. Fork or clone this repository
+2. Install Vercel CLI: `npm i -g vercel`
+3. Run `vercel` in the project directory
+4. Follow the prompts to deploy
 
 ## Usage Guide
 
-### Daily Workflow
+### Capacity Chart Tab
 
-1. **Open the app** in your browser
-2. **Enter sprint name** in the "Sprint Name/Number" field
-3. **Click "Sync with Asana"** to fetch current data
-4. **Review capacity table** showing:
-   - Team member capacity percentages
-   - Available days (editable)
-   - Status indicators (Under/At/Over Capacity)
-   - Sprint goals from Asana
-   - Support needs (editable)
-5. **Update as needed** - All changes save automatically
-6. **Switch to Support Overview** tab to see who needs help
+1. **Configuration Section**:
+   - Set your sprint number and duration (default: 30 days)
+   - Enter your Asana personal token and project ID
+   - Click "Sync with Asana" to fetch data
 
-### Capacity Status
+2. **Capacity Table**:
+   - View each team member's capacity percentage (with 15% buffer applied)
+   - Edit available days for each person (out of 30 sprint days)
+   - Add support needs in the last column
+   - Status is automatically calculated:
+     - 🟢 Under Capacity (<90%)
+     - 🟡 At Capacity (90-105%)
+     - 🔴 Over Capacity (>105%)
 
-- 🟢 **Under Capacity** (<90%): Team member can take on more work
-- 🟡 **At Capacity** (90-105%): Team member is well-utilized
-- 🔴 **Over Capacity** (>105%): Team member may need support
+3. **Bar Chart**:
+   - Visual representation of team capacity
+   - Hover over bars for details
+   - Color-coded by capacity status
 
 ### Support Overview Tab
 
 - **Needs Support**: Team members who have support notes
-- **Under Capacity**: Team members below 90% who can help others
+- **Under Capacity**: Team members below 90% capacity who can help others
 
 ## T-shirt Size Mapping
 
@@ -104,19 +81,27 @@ The tool automatically converts Asana task sizes to capacity days:
 | S    | 2    | Small task |
 | M    | 5    | Medium task (default) |
 | L    | 8    | Large task |
-| XL   | 9    | Extra large task |
+| XL   | 10   | Extra large task |
+
+## Capacity Calculation
+
+The tool applies a **15% buffer** to account for:
+- Team meetings and standups
+- Unexpected interruptions
+- Context switching
+- Administrative tasks
+
+**Formula**: `Capacity % = (Total Story Points / (Available Days × 0.85)) × 100`
 
 ## How It Works
 
 ### Data Flow
 
-1. **Sprint Name Input**: User enters sprint name
-2. **Project Lookup**: Tool finds matching Asana project using configured mappings
-3. **Asana API Call**: Fetches tasks from the determined project
-4. **Task Processing**: Extracts assignee, task name, and t-shirt size
-5. **Capacity Calculation**: Converts sizes to days and calculates percentages
-6. **Local Storage**: Saves all user inputs for persistence
-7. **Visualization**: Updates table and charts in real-time
+1. **Asana API Call**: Fetches tasks from your specified project
+2. **Task Processing**: Extracts assignee, task name, and t-shirt size
+3. **Capacity Calculation**: Converts sizes to days, applies 15% buffer, and calculates percentages
+4. **Local Storage**: Saves all user inputs for persistence
+5. **Visualization**: Updates table and charts in real-time
 
 ### Finding T-shirt Sizes
 
@@ -125,21 +110,39 @@ The tool looks for t-shirt sizes in this order:
 2. Task notes containing XS, S, M, L, or XL
 3. Defaults to "M" (5 days) if no size is found
 
-## Admin Functions
+## Setup Instructions
 
-### Accessing Admin Panel
-- Press `Ctrl+Shift+A` to toggle admin configuration
-- Admin panel is hidden by default for team members
+### Local Development
 
-### Admin Features
-- **Asana Token Management**: Set and update the team's Asana token
-- **Project Mapping**: Configure which sprints map to which Asana projects
-- **Settings Reset**: Clear all saved data and start fresh
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/coelcreates/capacityplanner.git
+   cd capacityplanner
+   ```
 
-### Security Considerations
-- Admin panel is hidden from regular users
-- Token is stored locally in browser
-- No server-side storage of sensitive data
+2. Open `home.html` in your browser or serve it locally:
+   ```bash
+   # Using Python
+   python -m http.server 8000
+   
+   # Using Node.js
+   npx serve .
+   ```
+
+3. Navigate to `http://localhost:8000`
+
+### Vercel Deployment
+
+1. **Automatic Deployment** (Recommended):
+   - Push your code to GitHub
+   - Connect your repository to Vercel
+   - Vercel will automatically deploy on every push
+
+2. **Manual Deployment**:
+   ```bash
+   npm i -g vercel
+   vercel
+   ```
 
 ## Customization
 
@@ -153,49 +156,61 @@ const TSHIRT_SIZES = {
   'S': 2, 
   'M': 5, 
   'L': 8, 
-  'XL': 9,
+  'XL': 10,
   'XXL': 13  // Add custom sizes
 };
 ```
 
 ### Changing Capacity Thresholds
 
-Modify the capacity calculation in `renderCapacityTable()`:
+Modify the capacity calculation in `getCapacityStatus()`:
 
 ```javascript
-// Current thresholds
-if (percent < 90) {
-  statusClass = 'status-green';
-  statusText = 'Under Capacity';
-} else if (percent <= 105) {
-  statusClass = 'status-yellow';
-  statusText = 'At Capacity';
-} else {
-  statusClass = 'status-red';
-  statusText = 'Over Capacity';
+function getCapacityStatus(percent) {
+  if (percent < 90) return { text: 'UNDER CAPACITY', color: '#22c55e', bg: '#e6fbe6' };
+  if (percent <= 105) return { text: 'AT CAPACITY', color: '#ffc107', bg: '#fffbe6' };
+  return { text: 'OVER CAPACITY', color: '#dc3545', bg: '#ffeaea' };
 }
 ```
+
+### Adjusting the Buffer Percentage
+
+To change the 15% buffer, modify the `calculateCapacityPercentage()` function:
+
+```javascript
+function calculateCapacityPercentage(total, available) {
+  const bufferPercentage = 0.15; // 15% buffer
+  const bufferedAvailable = available * (1 - bufferPercentage);
+  return ((total / bufferedAvailable) * 100).toFixed(1);
+}
+```
+
+## Security Considerations
+
+- **Personal Tokens**: Never commit your Asana token to version control
+- **Local Storage**: Data is stored locally in the browser
+- **CORS**: Asana API calls are made directly from the browser
+- **HTTPS**: Always use HTTPS in production
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **"Asana integration not configured"**:
-   - Press `Ctrl+Shift+A` to open admin panel
-   - Enter your Asana personal token
-   - Set up project mappings
-
-2. **"No project mapping found"**:
-   - In admin panel, add a mapping for your sprint pattern
-   - Use wildcards like "Sprint *" for general matching
-
-3. **"Project not found" Error**:
-   - Verify your project ID is correct in admin panel
+1. **"Project not found" Error**:
+   - Verify your project ID is correct
    - Ensure your token has access to the project
 
-4. **"No tasks found"**:
+2. **"No tasks found"**:
    - Check that tasks are assigned to team members
    - Verify the project contains tasks
+
+3. **T-shirt sizes not detected**:
+   - Add custom fields to your Asana project
+   - Include size information in task notes
+
+4. **Data not persisting**:
+   - Check browser localStorage settings
+   - Ensure cookies are enabled
 
 ### Debug Mode
 

@@ -16,7 +16,7 @@
     "project-management",
     "team-capacity"
   ],
-  "author": "Your Name",
+  "author": "Courtney",
   "license": "MIT",
   "devDependencies": {
     "serve": "^14.2.0"
@@ -26,10 +26,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/agile-capacity-planner.git"
+    "url": "https://github.com/coelcreates/capacityplanner.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/agile-capacity-planner/issues"
+    "url": "https://github.com/coelcreates/capacityplanner/issues"
   },
-  "homepage": "https://github.com/yourusername/agile-capacity-planner#readme"
+  "homepage": "https://github.com/coelcreates/capacityplanner#readme"
 } 
