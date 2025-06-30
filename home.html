@@ -65,6 +65,27 @@
       font-size: 1.1em;
       opacity: 0.85;
     }
+    /* Editable pill styles */
+    .pill [contenteditable="true"] {
+      cursor: text;
+      outline: none;
+      transition: background-color 0.2s;
+      border-radius: 0.25rem;
+      padding: 0.1rem 0.2rem;
+      margin: -0.1rem -0.2rem;
+    }
+    .pill [contenteditable="true"]:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    .pill [contenteditable="true"]:focus {
+      background-color: rgba(255, 255, 255, 0.15);
+      box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.3);
+    }
+    .pill [contenteditable="true"]:empty::before {
+      content: attr(aria-label);
+      color: rgba(255, 255, 255, 0.6);
+      font-style: italic;
+    }
     .actions {
       display: flex;
       flex-wrap: wrap;
@@ -314,6 +335,14 @@
       margin-left: 0.3em;
       margin-right: 0.1em;
     }
+    .goal-tag.missing-size {
+      background: #f1f3f7;
+      color: #888;
+    }
+    .goal-tag.work-area {
+      background: #e6fbe6;
+      color: #22c55e;
+    }
     .support-dropdown {
       width: 100%;
       padding: 0.3em;
@@ -334,6 +363,81 @@
     .support-dropdown option:checked {
       background: var(--brand-blue);
       color: white;
+    }
+    
+    /* Support Checkbox Styles */
+    .support-checkbox-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3em;
+      padding: 0.5em;
+      border: 1px solid #ddd;
+      border-radius: 0.3em;
+      background: #fff;
+      min-height: 60px;
+      max-height: 120px;
+      overflow-y: auto;
+    }
+    
+    .support-checkbox-container:focus-within {
+      outline: 2px solid var(--brand-blue);
+      outline-offset: 2px;
+      border-color: var(--brand-blue);
+    }
+    
+    .support-checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      font-size: 0.85em;
+      cursor: pointer;
+      padding: 0.2em 0;
+      border-radius: 0.2em;
+      transition: background-color 0.2s;
+    }
+    
+    .support-checkbox-item:hover {
+      background-color: #f8fafc;
+    }
+    
+    .support-checkbox-item input[type="checkbox"] {
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid #cbd5e1;
+      border-radius: 50%;
+      background: white;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s;
+    }
+    
+    .support-checkbox-item input[type="checkbox"]:checked {
+      border-color: var(--brand-blue);
+      background: var(--brand-blue);
+    }
+    
+    .support-checkbox-item input[type="checkbox"]:checked::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 6px;
+      height: 6px;
+      background: white;
+      border-radius: 50%;
+    }
+    
+    .support-checkbox-item input[type="checkbox"]:focus {
+      outline: 2px solid var(--brand-blue);
+      outline-offset: 2px;
+    }
+    
+    .support-checkbox-item label {
+      cursor: pointer;
+      user-select: none;
+      flex: 1;
     }
     /* Table Styles */
     .capacity-table { 
@@ -399,15 +503,183 @@
     }
     .support-yellow { background: #fffbe6; color: #b68900; }
     .support-gray { background: #f1f3f7; color: #888; }
+    /* Date Picker Styles */
+    .date-picker-popup {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--brand-white);
+      border-radius: 1rem;
+      box-shadow: 0 8px 32px rgba(26,35,183,0.15);
+      border: 2px solid var(--brand-blue);
+      z-index: 1000;
+      padding: 1.5rem;
+      margin-top: 0.5rem;
+      min-width: 320px;
+      display: none;
+    }
+    
+    .date-picker-popup::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-bottom: 8px solid var(--brand-blue);
+    }
+    
+    .date-picker-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--brand-border);
+    }
+    
+    .date-picker-header h3 {
+      margin: 0;
+      color: var(--brand-blue);
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    
+    .date-picker-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--brand-gray);
+      cursor: pointer;
+      padding: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: background-color 0.2s;
+    }
+    
+    .date-picker-close:hover {
+      background-color: #f1f3f7;
+    }
+    
+    .date-inputs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .date-input-group {
+      flex: 1;
+    }
+    
+    .date-input-group label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #222;
+      margin-bottom: 0.3rem;
+    }
+    
+    .date-input-group input {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid var(--brand-border);
+      border-radius: 0.5rem;
+      font-size: 0.9rem;
+      font-family: inherit;
+    }
+    
+    .date-input-group input:focus {
+      outline: none;
+      border-color: var(--brand-blue);
+      box-shadow: 0 0 0 2px rgba(26,35,183,0.1);
+    }
+    
+    .date-picker-actions {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: flex-end;
+    }
+    
+    .date-picker-btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    
+    .date-picker-btn.cancel {
+      background: #f1f3f7;
+      color: var(--brand-gray);
+    }
+    
+    .date-picker-btn.cancel:hover {
+      background: #e5e7eb;
+    }
+    
+    .date-picker-btn.apply {
+      background: var(--brand-blue);
+      color: var(--brand-white);
+    }
+    
+    .date-picker-btn.apply:hover {
+      background: #1a23b7;
+    }
+    
+    .working-days-pill {
+      position: relative;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    
+    .working-days-pill:hover {
+      background-color: #2d39c4;
+    }
+    
+    .working-days-pill:focus-within {
+      outline: 2px solid var(--brand-yellow);
+      outline-offset: 2px;
+    }
   </style>
 </head>
 <body>
   <div class="header">
     <h1 id="sprint-title">Sprint Capacity Planner</h1>
-    <p id="sprint-desc">Together now integrated capacity planning with automatic downtime buffers. See everyone's capacity, understand sprint goals, and match support needs.</p>
+    <p id="sprint-desc">TogetherNow integrated capacity planning with automatic downtime buffers. See everyone's capacity, understand sprint goals, and match support needs.</p>
     <div class="info-bar">
-      <span class="pill"><span class="icon">📅</span> <span id="sprint-dates">July 5, 2024 - August 5, 2024</span></span>
-      <span class="pill"><span class="icon">🗓️</span> <span id="working-days">30 Working Days</span></span>
+      <span class="pill"><span class="icon">📅</span> <span id="sprint-dates" contenteditable="true" role="textbox" aria-label="Sprint dates">July 5, 2024 - August 5, 2024</span></span>
+      <span class="pill working-days-pill" id="working-days-pill"><span class="icon">🗓️</span> <span id="working-days" role="button" tabindex="0" aria-label="Click to set working days">30 Working Days</span>
+        <div class="date-picker-popup" id="date-picker">
+          <div class="date-picker-header">
+            <h3>Set Sprint Dates</h3>
+            <button class="date-picker-close" id="close-date-picker" aria-label="Close date picker">×</button>
+          </div>
+          <div class="date-inputs">
+            <div class="date-input-group">
+              <label for="start-date">Start Date</label>
+              <input type="date" id="start-date" aria-label="Sprint start date">
+            </div>
+            <div class="date-input-group">
+              <label for="end-date">End Date</label>
+              <input type="date" id="end-date" aria-label="Sprint end date">
+            </div>
+          </div>
+          <div class="date-picker-actions">
+            <button class="date-picker-btn cancel" id="cancel-dates">Cancel</button>
+            <button class="date-picker-btn apply" id="apply-dates">Apply</button>
+          </div>
+        </div>
+      </span>
       <span class="pill"><span class="icon">🛡️</span> <span id="buffer">15% Buffer Applied</span></span>
     </div>
   </div>
@@ -502,7 +774,7 @@
           <h4 style="margin-top: 0; color: var(--brand-blue);">💡 Pro Tips</h4>
           <ul style="margin-bottom: 0; color: #444;">
             <li>Use t-shirt sizes (XS, S, M, L, XL) in your Asana tasks for automatic capacity calculation</li>
-            <li>Select support needs from the dropdown: None, Admin help, Thinking Partner, Coworking Partner, Strategy or Feedback, or Leadership Support</li>
+            <li>Select support needs using the checkboxes: None, Admin help, Thinking Partner, Coworking Partner, Strategy or Feedback, or Leadership Support</li>
             <li>You can select multiple support options for each team member</li>
             <li>Export your data regularly to keep backups of your capacity planning</li>
           </ul>
@@ -590,6 +862,175 @@
       if (percent <= 105) return { text: 'AT CAPACITY', color: '#ffc107', bg: '#fffbe6' };
       return { text: 'OVER CAPACITY', color: '#dc3545', bg: '#ffeaea' };
     }
+
+    // --- Editable Header Elements ---
+    const sprintDatesElement = document.getElementById('sprint-dates');
+    const workingDaysElement = document.getElementById('working-days');
+    const workingDaysPill = document.getElementById('working-days-pill');
+    const datePicker = document.getElementById('date-picker');
+    const startDateInput = document.getElementById('start-date');
+    const endDateInput = document.getElementById('end-date');
+    const closeDatePicker = document.getElementById('close-date-picker');
+    const cancelDates = document.getElementById('cancel-dates');
+    const applyDates = document.getElementById('apply-dates');
+    
+    // Restore saved values on page load
+    const savedSprintDates = localStorage.getItem('sprint-dates');
+    const savedWorkingDays = localStorage.getItem('working-days');
+    const savedStartDate = localStorage.getItem('sprint-start-date');
+    const savedEndDate = localStorage.getItem('sprint-end-date');
+    
+    if (savedSprintDates) {
+      sprintDatesElement.textContent = savedSprintDates;
+    }
+    if (savedWorkingDays) {
+      workingDaysElement.textContent = savedWorkingDays;
+    }
+    if (savedStartDate) {
+      startDateInput.value = savedStartDate;
+    }
+    if (savedEndDate) {
+      endDateInput.value = savedEndDate;
+    }
+    
+    // Calculate working days between two dates (excluding weekends)
+    function calculateWorkingDays(startDate, endDate) {
+      // Parse dates properly to avoid timezone issues
+      const [startYear, startMonth, startDay] = startDate.split('-').map(Number);
+      const [endYear, endMonth, endDay] = endDate.split('-').map(Number);
+      
+      const start = new Date(startYear, startMonth - 1, startDay); // month is 0-indexed
+      const end = new Date(endYear, endMonth - 1, endDay); // month is 0-indexed
+      
+      let workingDays = 0;
+      const current = new Date(start);
+      
+      while (current <= end) {
+        const dayOfWeek = current.getDay();
+        if (dayOfWeek !== 0 && dayOfWeek !== 6) { // 0 = Sunday, 6 = Saturday
+          workingDays++;
+        }
+        current.setDate(current.getDate() + 1);
+      }
+      
+      return workingDays;
+    }
+    
+    // Format date for display
+    function formatDateForDisplay(dateString) {
+      // Parse the date string properly to avoid timezone issues
+      const [year, month, day] = dateString.split('-').map(Number);
+      const date = new Date(year, month - 1, day); // month is 0-indexed
+      return date.toLocaleDateString('en-US', { 
+        month: 'long', 
+        day: 'numeric', 
+        year: 'numeric' 
+      });
+    }
+    
+    // Show date picker
+    function showDatePicker() {
+      datePicker.style.display = 'block';
+      // Set default dates if not already set
+      if (!startDateInput.value) {
+        const today = new Date();
+        startDateInput.value = today.toISOString().split('T')[0];
+      }
+      if (!endDateInput.value) {
+        const endDate = new Date();
+        endDate.setDate(endDate.getDate() + 30);
+        endDateInput.value = endDate.toISOString().split('T')[0];
+      }
+      startDateInput.focus();
+    }
+    
+    // Hide date picker
+    function hideDatePicker() {
+      datePicker.style.display = 'none';
+    }
+    
+    // Apply selected dates
+    function applySelectedDates() {
+      const startDate = startDateInput.value;
+      const endDate = endDateInput.value;
+      
+      if (!startDate || !endDate) {
+        alert('Please select both start and end dates.');
+        return;
+      }
+      
+      // Parse dates properly for comparison
+      const [startYear, startMonth, startDay] = startDate.split('-').map(Number);
+      const [endYear, endMonth, endDay] = endDate.split('-').map(Number);
+      const startDateObj = new Date(startYear, startMonth - 1, startDay);
+      const endDateObj = new Date(endYear, endMonth - 1, endDay);
+      
+      if (startDateObj > endDateObj) {
+        alert('Start date must be before end date.');
+        return;
+      }
+      
+      const workingDays = calculateWorkingDays(startDate, endDate);
+      const startFormatted = formatDateForDisplay(startDate);
+      const endFormatted = formatDateForDisplay(endDate);
+      
+      // Update display
+      workingDaysElement.textContent = `${workingDays} Working Days`;
+      sprintDatesElement.textContent = `${startFormatted} - ${endFormatted}`;
+      
+      // Save to localStorage
+      localStorage.setItem('working-days', `${workingDays} Working Days`);
+      localStorage.setItem('sprint-dates', `${startFormatted} - ${endFormatted}`);
+      localStorage.setItem('sprint-start-date', startDate);
+      localStorage.setItem('sprint-end-date', endDate);
+      
+      hideDatePicker();
+    }
+    
+    // Event listeners for date picker
+    workingDaysPill.addEventListener('click', showDatePicker);
+    workingDaysElement.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        showDatePicker();
+      }
+    });
+    
+    closeDatePicker.addEventListener('click', hideDatePicker);
+    cancelDates.addEventListener('click', hideDatePicker);
+    applyDates.addEventListener('click', applySelectedDates);
+    
+    // Close date picker when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!workingDaysPill.contains(e.target) && !datePicker.contains(e.target)) {
+        hideDatePicker();
+      }
+    });
+    
+    // Save sprint dates when editing is complete
+    function saveEditableValue(element, key) {
+      const value = element.textContent.trim();
+      if (value) {
+        localStorage.setItem(key, value);
+        console.log(`Saved ${key}:`, value);
+      }
+    }
+    
+    // Handle sprint dates editing events
+    sprintDatesElement.addEventListener('blur', () => saveEditableValue(sprintDatesElement, 'sprint-dates'));
+    sprintDatesElement.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        sprintDatesElement.blur();
+      }
+    });
+    
+    // Prevent empty content for sprint dates
+    sprintDatesElement.addEventListener('input', () => {
+      if (!sprintDatesElement.textContent.trim()) {
+        sprintDatesElement.textContent = 'July 5, 2024 - August 5, 2024';
+      }
+    });
 
     // --- Admin Config Functionality ---
     const tokenInput = document.getElementById('asana-token');
@@ -764,21 +1205,50 @@
         tasks.forEach(task => {
           const name = task.assignee?.name || 'Unassigned';
           let tshirtSize = null;
+          let workArea = null;
+          
+          // Extract t-shirt size and work area from custom fields
           if (task.custom_fields && task.custom_fields.length > 0) {
-            const tshirtField = task.custom_fields.find(f => f.name.toLowerCase().includes('t-shirt') || f.name.toLowerCase().includes('size') || f.name.toLowerCase().includes('story point'));
+            // Find t-shirt size field
+            const tshirtField = task.custom_fields.find(f => 
+              f.name.toLowerCase().includes('t-shirt') || 
+              f.name.toLowerCase().includes('size') || 
+              f.name.toLowerCase().includes('story point')
+            );
             if (tshirtField && tshirtField.display_value) {
               tshirtSize = tshirtField.display_value.toUpperCase();
             }
+            
+            // Find work area field
+            const workAreaField = task.custom_fields.find(f => 
+              f.name.toLowerCase().includes('work area') || 
+              f.name.toLowerCase().includes('area') || 
+              f.name.toLowerCase().includes('team') ||
+              f.name.toLowerCase().includes('department')
+            );
+            if (workAreaField && workAreaField.display_value) {
+              workArea = workAreaField.display_value;
+            }
           }
+          
+          // Fallback: try to extract from task notes
           if (!tshirtSize && task.notes) {
             const sizeMatch = task.notes.match(/\b(XS|S|M|L|XL)\b/i);
             if (sizeMatch) tshirtSize = sizeMatch[1].toUpperCase();
           }
-          // If still not found, default to zero days
+          
+          // Calculate size for capacity
           const size = tshirtSize && TSHIRT_SIZES[tshirtSize] ? TSHIRT_SIZES[tshirtSize] : 0;
+          
           if (!members[name]) members[name] = { goals: [], total: 0, support: ['None'], available: 30 };
           members[name].total += size;
-          members[name].goals.push(task.name);
+          
+          // Store task with metadata for pill display
+          members[name].goals.push({
+            name: task.name,
+            tshirtSize: tshirtSize,
+            workArea: workArea
+          });
         });
         
         console.log('Processed members:', Object.keys(members));
@@ -818,7 +1288,10 @@
         container.style.display = 'block';
         container.style.position = 'relative';
         container.style.minHeight = '200px';
-        document.getElementById('capacity-section').appendChild(container);
+        container.style.marginBottom = '2rem';
+        // Insert before the capacity card
+        const capacityCard = document.getElementById('capacity-card');
+        capacityCard.parentNode.insertBefore(container, capacityCard);
       }
       let html = `<h2 style="font-size:1.5rem;font-weight:700;color:#222;margin-bottom:1rem;">Team Capacity Overview</h2><div style="display:flex;gap:0.8rem;justify-content:center;align-items:end;min-height:150px;flex-wrap:wrap;">`;
       if (!members || Object.keys(members).length === 0) {
@@ -944,14 +1417,43 @@
         // Sprint goals with tags
         let goalsHtml = '';
         if (data.goals && data.goals.length > 0) {
-          goalsHtml = data.goals.map(goal => {
-            // Try to extract tags (e.g., XL, Enterprise) from goal string
-            let tags = '';
-            const tagMatch = goal.match(/\b(XL|L|M|S|Enterprise|ICS|SCN|CTL|Exchange|Other)\b/gi);
-            if (tagMatch) {
-              tags = tagMatch.map(t => `<span class='goal-tag'>${t}</span>`).join(' ');
+          goalsHtml = data.goals.map((goal, index) => {
+            // Handle both old string format and new object format
+            let taskName, tshirtSize, workArea;
+            
+            if (typeof goal === 'string') {
+              // Legacy format - extract from string
+              taskName = goal;
+              const tagMatch = goal.match(/\b(XL|L|M|S|Enterprise|ICS|SCN|CTL|Exchange|Other)\b/gi);
+              tshirtSize = tagMatch ? tagMatch[0] : null;
+              workArea = null;
+            } else {
+              // New object format
+              taskName = goal.name;
+              tshirtSize = goal.tshirtSize;
+              workArea = goal.workArea;
             }
-            return `<div style='margin-bottom:0.2em;'>${goal.replace(/\b(XL|L|M|S|Enterprise|ICS|SCN|CTL|Exchange|Other)\b/gi, '').trim()} ${tags}</div>`;
+            
+            // Build pill capsules
+            let pills = '';
+            
+            // T-shirt size pill
+            if (tshirtSize) {
+              pills += `<span class='goal-tag'>${tshirtSize}</span>`;
+            } else {
+              pills += `<span class='goal-tag missing-size'>Missing Size</span>`;
+            }
+            
+            // Work area pill (only if present)
+            if (workArea) {
+              pills += `<span class='goal-tag work-area'>${workArea}</span>`;
+            }
+            
+            // Add subtle border and padding for visual separation
+            const isLast = index === data.goals.length - 1;
+            const borderStyle = isLast ? '' : 'border-bottom: 1px solid #f1f3f7;';
+            
+            return `<div style='margin-bottom:0.5em; padding-bottom:0.5em; ${borderStyle}'>${taskName} ${pills}</div>`;
           }).join('');
         }
         html += `<tr class="tr-row${rowIdx % 2 === 0 ? ' even' : ' odd'}">
@@ -971,17 +1473,44 @@
           </td>
           <td class="td-main left">${goalsHtml}</td>
           <td class="td-main left">
-            <select multiple 
-                    class="support-dropdown"
-                    onchange="updateSupport('${member}', this)"
-                    aria-label="Support needed for ${member}">
-              <option value="None" ${(!data.support || (Array.isArray(data.support) && data.support.includes('None')) || (!Array.isArray(data.support) && data.support === 'None')) ? 'selected' : ''}>None</option>
-              <option value="Admin help" ${(data.support && Array.isArray(data.support) && data.support.includes('Admin help')) ? 'selected' : ''}>Admin help</option>
-              <option value="Thinking Partner" ${(data.support && Array.isArray(data.support) && data.support.includes('Thinking Partner')) ? 'selected' : ''}>Thinking Partner</option>
-              <option value="Coworking Partner" ${(data.support && Array.isArray(data.support) && data.support.includes('Coworking Partner')) ? 'selected' : ''}>Coworking Partner</option>
-              <option value="Strategy or Feedback" ${(data.support && Array.isArray(data.support) && data.support.includes('Strategy or Feedback')) ? 'selected' : ''}>Strategy or Feedback</option>
-              <option value="Leadership Support" ${(data.support && Array.isArray(data.support) && data.support.includes('Leadership Support')) ? 'selected' : ''}>Leadership Support</option>
-            </select>
+            <div class="support-checkbox-container" tabindex="0">
+              <div class="support-checkbox-item">
+                <input type="checkbox" id="none-${member}" value="None" 
+                       ${(!data.support || (Array.isArray(data.support) && data.support.includes('None')) || (!Array.isArray(data.support) && data.support === 'None')) ? 'checked' : ''}
+                       onchange="updateSupportCheckbox('${member}', this)">
+                <label for="none-${member}">None</label>
+              </div>
+              <div class="support-checkbox-item">
+                <input type="checkbox" id="admin-${member}" value="Admin help" 
+                       ${(data.support && Array.isArray(data.support) && data.support.includes('Admin help')) ? 'checked' : ''}
+                       onchange="updateSupportCheckbox('${member}', this)">
+                <label for="admin-${member}">Admin help</label>
+              </div>
+              <div class="support-checkbox-item">
+                <input type="checkbox" id="thinking-${member}" value="Thinking Partner" 
+                       ${(data.support && Array.isArray(data.support) && data.support.includes('Thinking Partner')) ? 'checked' : ''}
+                       onchange="updateSupportCheckbox('${member}', this)">
+                <label for="thinking-${member}">Thinking Partner</label>
+              </div>
+              <div class="support-checkbox-item">
+                <input type="checkbox" id="coworking-${member}" value="Coworking Partner" 
+                       ${(data.support && Array.isArray(data.support) && data.support.includes('Coworking Partner')) ? 'checked' : ''}
+                       onchange="updateSupportCheckbox('${member}', this)">
+                <label for="coworking-${member}">Coworking Partner</label>
+              </div>
+              <div class="support-checkbox-item">
+                <input type="checkbox" id="strategy-${member}" value="Strategy or Feedback" 
+                       ${(data.support && Array.isArray(data.support) && data.support.includes('Strategy or Feedback')) ? 'checked' : ''}
+                       onchange="updateSupportCheckbox('${member}', this)">
+                <label for="strategy-${member}">Strategy or Feedback</label>
+              </div>
+              <div class="support-checkbox-item">
+                <input type="checkbox" id="leadership-${member}" value="Leadership Support" 
+                       ${(data.support && Array.isArray(data.support) && data.support.includes('Leadership Support')) ? 'checked' : ''}
+                       onchange="updateSupportCheckbox('${member}', this)">
+                <label for="leadership-${member}">Leadership Support</label>
+              </div>
+            </div>
           </td>
         </tr>`;
         rowIdx++;
@@ -1019,6 +1548,60 @@
         renderSupportOverview(members);
       }
     };
+    window.updateSupportCheckbox = function(member, checkbox) {
+      const members = loadFromStorage('capacityData', {});
+      if (members[member]) {
+        // Get all checkboxes for this member
+        const checkboxes = document.querySelectorAll(`input[type="checkbox"][id$="-${member}"]`);
+        const selectedOptions = Array.from(checkboxes)
+          .filter(cb => cb.checked)
+          .map(cb => cb.value);
+        
+        // Handle "None" checkbox logic
+        if (checkbox.value === 'None') {
+          if (checkbox.checked) {
+            // If "None" is checked, uncheck all other options
+            checkboxes.forEach(cb => {
+              if (cb.value !== 'None') {
+                cb.checked = false;
+              }
+            });
+            members[member].support = ['None'];
+          } else {
+            // If "None" is unchecked, ensure at least one other option is selected
+            const otherSelected = selectedOptions.filter(option => option !== 'None');
+            if (otherSelected.length === 0) {
+              // If no other options are selected, keep "None" checked
+              checkbox.checked = true;
+              return;
+            }
+            members[member].support = otherSelected;
+          }
+        } else {
+          // If a non-"None" option is checked, uncheck "None"
+          const noneCheckbox = document.getElementById(`none-${member}`);
+          if (noneCheckbox && noneCheckbox.checked) {
+            noneCheckbox.checked = false;
+          }
+          
+          // If no options are selected, default to "None"
+          if (selectedOptions.length === 0) {
+            const noneCheckbox = document.getElementById(`none-${member}`);
+            if (noneCheckbox) {
+              noneCheckbox.checked = true;
+            }
+            members[member].support = ['None'];
+          } else {
+            members[member].support = selectedOptions;
+          }
+        }
+        
+        saveToStorage('capacityData', members);
+        renderCapacityTable(members);
+        renderSupportOverview(members);
+      }
+    };
+    
     // Render Support Overview
     function renderSupportOverview(members) {
       if (!members) members = loadFromStorage('capacityData', {});
@@ -1027,17 +1610,35 @@
       overList.innerHTML = '';
       underList.innerHTML = '';
       let hasOver = false, hasUnder = false;
+      
       Object.entries(members).forEach(([member, data]) => {
         const available = data.available || 30;
         const percent = calculateCapacityPercentage(data.total, available);
         const status = getCapacityStatus(parseFloat(percent));
-        if (status.text === 'OVER CAPACITY') {
+        
+        // Check if member needs support (regardless of capacity status)
+        const needsSupport = data.support && Array.isArray(data.support) && 
+                           data.support.length > 0 && 
+                           !(data.support.length === 1 && data.support[0] === 'None');
+        
+        // Add to "Over Capacity & Support Needed" if over capacity OR needs support
+        if (status.text === 'OVER CAPACITY' || needsSupport) {
           const li = document.createElement('li');
-          const supportText = Array.isArray(data.support) ? data.support.join(', ') : (data.support || '');
-          li.innerHTML = `<strong>${member}</strong> <span style="color:#dc3545;font-weight:600;">(${percent}%)</span><br><span style="font-size:0.95em;">${supportText}</span>`;
+          const supportText = Array.isArray(data.support) ? data.support.join(', ') : (data.support || 'None');
+          let capacityIndicator = '';
+          
+          if (status.text === 'OVER CAPACITY') {
+            capacityIndicator = `<span style="color:#dc3545;font-weight:600;">(${percent}% - Over Capacity)</span>`;
+          } else if (needsSupport) {
+            capacityIndicator = `<span style="color:#ffc107;font-weight:600;">(${percent}% - Needs Support)</span>`;
+          }
+          
+          li.innerHTML = `<strong>${member}</strong> ${capacityIndicator}<br><span style="font-size:0.95em;">${supportText}</span>`;
           overList.appendChild(li);
           hasOver = true;
         }
+        
+        // Add to "Under Capacity" if under capacity
         if (status.text === 'UNDER CAPACITY') {
           const li = document.createElement('li');
           li.innerHTML = `<strong>${member}</strong> <span style="color:#22c55e;font-weight:600;">(${percent}%)</span>`;
@@ -1045,9 +1646,11 @@
           hasUnder = true;
         }
       });
+      
       if (!hasOver) overList.innerHTML = '<li class="empty-state">No one is over capacity or requesting support.</li>';
       if (!hasUnder) underList.innerHTML = '<li class="empty-state">No one is under capacity.</li>';
     }
+    
     // On load, restore last sprint and data
     window.onload = () => {
       const lastSprint = localStorage.getItem('lastSprint');
