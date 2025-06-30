@@ -3,348 +3,825 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Agile Capacity Planner</title>
+  <title>Capacity Planner</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      background: #f4f8fb;
-      color: #333;
+    :root {
+      --brand-blue: #1a23b7;
+      --brand-yellow: #ffe600;
+      --brand-purple: #a259e6;
+      --brand-green: #22c55e;
+      --brand-orange: #ff6b1a;
+      --brand-gray: #6c757d;
+      --brand-bg: #f7f9fb;
+      --brand-white: #fff;
+      --brand-border: #e5e7eb;
     }
-
-    header {
-      background: #4a90e2;
-      padding: 1em;
-      color: white;
+    html, body {
+      font-family: 'Inter', system-ui, Arial, sans-serif;
+      background: var(--brand-bg);
+      color: #222;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    .header {
+      background: var(--brand-blue);
+      color: var(--brand-white);
+      padding: 3rem 1rem 2rem 1rem;
       text-align: center;
     }
-
-    nav {
-      display: flex;
-      justify-content: center;
-      background: #e0e8f0;
-      padding: 0.5em;
+    .header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin: 0 0 0.5rem 0;
+      letter-spacing: -1px;
     }
-
-    nav button {
-      background: #ffffff;
+    .header p {
+      font-size: 1.15rem;
+      font-weight: 400;
+      margin: 0 0 1.5rem 0;
+      opacity: 0.95;
+    }
+    .info-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .pill {
+      display: flex;
+      align-items: center;
+      background: #2d39c4;
+      color: var(--brand-white);
+      border-radius: 2rem;
+      padding: 0.5rem 1.25rem;
+      font-size: 1rem;
+      font-weight: 600;
+      gap: 0.5rem;
+    }
+    .pill .icon {
+      font-size: 1.1em;
+      opacity: 0.85;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin: -2.5rem 0 2rem 0;
+      position: relative;
+      z-index: 2;
+    }
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      font-size: 1rem;
+      font-weight: 600;
       border: none;
-      padding: 0.8em 1.5em;
-      margin: 0 0.5em;
-      border-radius: 8px;
+      border-radius: 0.75em;
+      padding: 0.85em 1.5em;
       cursor: pointer;
-      font-weight: bold;
+      transition: box-shadow 0.2s, background 0.2s;
+      box-shadow: 0 2px 8px rgba(26,35,183,0.07);
     }
-
-    nav button.active {
-      background: #4a90e2;
-      color: white;
-    }
-
-    main {
-      padding: 1em 2em;
-    }
-
-    .section {
-      display: none;
-    }
-
-    .section.active {
-      display: block;
-    }
-
-    .input-group {
-      margin: 1em 0;
-    }
-
-    .input-group label {
-      display: block;
-      margin-bottom: 0.3em;
-      font-weight: bold;
-    }
-
-    .input-group input {
-      padding: 0.5em;
-      width: 100%;
-      max-width: 300px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 1em 0;
-      background: white;
-    }
-
-    th, td {
-      padding: 0.7em;
-      border: 1px solid #ddd;
-      text-align: left;
-    }
-
-    th {
-      background: #f0f4f8;
-    }
-
-    .status-green { background-color: #d4edda; }
-    .status-yellow { background-color: #fff3cd; }
-    .status-red { background-color: #f8d7da; }
-
-    .bar-chart {
+    .btn-orange { background: var(--brand-orange); color: var(--brand-white); }
+    .btn-green { background: var(--brand-green); color: var(--brand-white); }
+    .btn-purple { background: var(--brand-purple); color: var(--brand-white); }
+    .btn-yellow { background: var(--brand-yellow); color: #222; }
+    .btn-gray { background: var(--brand-gray); color: var(--brand-white); }
+    .action-btn:focus { outline: 2px solid var(--brand-yellow); outline-offset: 2px; }
+    .tabs {
       display: flex;
-      gap: 10px;
-      margin-top: 1em;
-    }
-
-    .bar {
-      width: 20px;
-      display: flex;
+      border-bottom: 2px solid var(--brand-border);
+      background: var(--brand-white);
+      margin-bottom: 2rem;
+      margin-top: 1rem;
       justify-content: center;
-      align-items: flex-end;
-      background: #ccc;
-      border-radius: 4px;
+      gap: 2rem;
     }
-
-    .bar-inner {
-      width: 100%;
-      border-radius: 4px 4px 0 0;
+    .tab-btn {
+      background: none;
+      border: none;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--brand-gray);
+      padding: 1rem 2rem 0.75rem 2rem;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: color 0.2s, border 0.2s;
     }
-
-    .bar-inner.green { background: #28a745; }
-    .bar-inner.yellow { background: #ffc107; }
-    .bar-inner.red { background: #dc3545; }
-
-    .support-columns {
+    .tab-btn.active {
+      color: var(--brand-blue);
+      border-bottom: 3px solid var(--brand-blue);
+      background: var(--brand-white);
+    }
+    .main-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem 3rem 1.5rem;
+    }
+    .card {
+      background: var(--brand-white);
+      border-radius: 1.25rem;
+      box-shadow: 0 2px 12px rgba(26,35,183,0.06);
+      padding: 3rem 2rem;
+      margin: 2rem auto;
+      max-width: 1100px;
+      text-align: center;
+      color: var(--brand-gray);
+      font-size: 1.15rem;
       display: flex;
-      gap: 2em;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .card .icon {
+      font-size: 2.5rem;
+      color: var(--brand-blue);
+      margin-bottom: 1rem;
+      opacity: 0.7;
+    }
+    .card h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 0.5rem;
+    }
+    .support-overview {
+      display: flex;
+      gap: 2rem;
+      margin: 2rem auto;
+      max-width: 900px;
+      justify-content: center;
       flex-wrap: wrap;
     }
-
-    .support-column {
-      flex: 1;
+    .support-col {
+      flex: 1 1 350px;
+      background: var(--brand-white);
+      border-radius: 1rem;
+      box-shadow: 0 2px 8px rgba(26,35,183,0.06);
+      padding: 2rem 1.5rem;
       min-width: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
     }
-
-    .support-column ul {
-      background: white;
-      padding: 1em;
-      border-radius: 6px;
+    .support-col h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--brand-blue);
+      margin-bottom: 1rem;
+    }
+    .support-list {
       list-style: none;
+      padding: 0;
       margin: 0;
+      width: 100%;
     }
-
-    .support-column h3 {
+    .support-list li {
+      background: #f3f6fa;
+      border-radius: 0.5rem;
+      padding: 0.75em 1em;
+      margin-bottom: 0.75em;
+      color: #222;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+    .support-list li:last-child { margin-bottom: 0; }
+    .empty-state {
+      color: var(--brand-gray);
+      font-style: italic;
+      text-align: center;
+      width: 100%;
+      margin-top: 1.5em;
+    }
+    /* Admin config panel */
+    #admin-config {
+      display: none;
+      position: fixed;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--brand-white);
+      border: 2px solid var(--brand-blue);
+      border-radius: 1rem;
+      box-shadow: 0 8px 32px rgba(26,35,183,0.15);
+      z-index: 1000;
+      padding: 2rem 2.5rem;
+      min-width: 320px;
+      max-width: 95vw;
+    }
+    #admin-config h3 {
+      color: var(--brand-blue);
       margin-top: 0;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+      font-weight: 700;
     }
-
-    #sync-button {
-      background: #4a90e2;
-      color: white;
-      padding: 0.6em 1.2em;
+    #admin-config .input-group {
+      margin-bottom: 1.2rem;
+    }
+    #admin-config label {
+      font-weight: 600;
+      margin-bottom: 0.3em;
+      display: block;
+    }
+    #admin-config input {
+      width: 100%;
+      padding: 0.6em;
+      border-radius: 0.5em;
+      border: 1px solid var(--brand-border);
+      font-size: 1em;
+      margin-bottom: 0.5em;
+    }
+    #admin-config .mapping-row {
+      display: flex;
+      gap: 0.5em;
+      margin-bottom: 0.5em;
+      align-items: center;
+    }
+    #admin-config .mapping-row input {
+      flex: 1;
+      margin-bottom: 0;
+    }
+    #admin-config .mapping-row button {
+      background: #dc3545;
+      color: #fff;
       border: none;
-      border-radius: 6px;
+      border-radius: 0.4em;
+      padding: 0.4em 0.7em;
       cursor: pointer;
-      font-weight: bold;
+      font-size: 1em;
+    }
+    #admin-config .add-mapping-btn {
+      background: var(--brand-green);
+      color: #fff;
+      border: none;
+      border-radius: 0.4em;
+      padding: 0.5em 1em;
+      font-size: 1em;
+      cursor: pointer;
+      margin-top: 0.5em;
+    }
+    #admin-config .clear-btn {
+      background: var(--brand-gray);
+      color: #fff;
+      border: none;
+      border-radius: 0.4em;
+      padding: 0.5em 1em;
+      font-size: 1em;
+      cursor: pointer;
+      margin-top: 1em;
+    }
+    #admin-config .token-status {
+      margin-left: 0.5em;
+      font-size: 0.95em;
+      color: var(--brand-green);
+    }
+    #admin-config .close-btn {
+      position: absolute;
+      top: 0.7em;
+      right: 1em;
+      background: none;
+      border: none;
+      font-size: 1.5em;
+      color: var(--brand-blue);
+      cursor: pointer;
+    }
+    @media (max-width: 600px) {
+      .header h1 { font-size: 1.5rem; }
+      .info-bar { flex-direction: column; gap: 0.5rem; }
+      .actions { flex-direction: column; gap: 0.75rem; }
+      .tabs { gap: 0.5rem; }
+      .tab-btn { padding: 0.75rem 1rem 0.5rem 1rem; font-size: 1rem; }
+      .main-content { padding: 0 0.5rem 2rem 0.5rem; }
+      .card { padding: 2rem 0.5rem; }
+      #admin-config { padding: 1rem 0.5rem; min-width: 0; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Agile Sprint Capacity Planner</h1>
-    <p>Visualize and plan team capacity directly from Asana</p>
-  </header>
+  <div class="header">
+    <h1 id="sprint-title">Sprint Capacity Planner</h1>
+    <p id="sprint-desc">Together now integrated capacity planning with automatic downtime buffers. See everyone's capacity, understand sprint goals, and match support needs.</p>
+    <div class="info-bar">
+      <span class="pill"><span class="icon">📅</span> <span id="sprint-dates">July 5, 2024 - August 5, 2024</span></span>
+      <span class="pill"><span class="icon">🗓️</span> <span id="working-days">30 Working Days</span></span>
+      <span class="pill"><span class="icon">🛡️</span> <span id="buffer">15% Buffer Applied</span></span>
+    </div>
+  </div>
+  <div class="actions">
+    <button class="action-btn btn-orange" id="edit-goals-btn"><span>✏️</span> Edit My Goals</button>
+    <button class="action-btn btn-green" id="sync-button"><span>🔄</span> Sync with Asana</button>
+    <button class="action-btn btn-purple" id="guide-btn"><span>📖</span> Definitions & Guide</button>
+    <button class="action-btn btn-yellow" id="archive-btn"><span>🗂️</span> Archive & New Sprint</button>
+    <button class="action-btn btn-gray" id="export-btn"><span>⬇️</span> Export Data</button>
+  </div>
+  <div class="main-content">
+    <div class="tabs">
+      <button class="tab-btn active" id="tab-capacity" aria-label="Capacity Overview">Capacity Overview</button>
+      <button class="tab-btn" id="tab-support" aria-label="Support Overview">Support Overview</button>
+    </div>
+    <div id="capacity-section">
+      <div class="card" id="capacity-card">
+        <span class="icon">📊</span>
+        <h2>Capacity Overview Content</h2>
+        <div id="capacity-table-content">This is where the capacity overview content would be displayed. The interface is ready for your capacity planning data and team management features.</div>
+      </div>
+    </div>
+    <div id="support-section" style="display:none;">
+      <div class="support-overview">
+        <div class="support-col">
+          <h3>Over Capacity & Support Needed</h3>
+          <ul class="support-list" id="over-capacity-list"></ul>
+        </div>
+        <div class="support-col">
+          <h3>Under Capacity</h3>
+          <ul class="support-list" id="under-capacity-list"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Admin Config Panel -->
+  <div id="admin-config">
+    <button class="close-btn" id="close-admin" aria-label="Close admin panel">×</button>
+    <h3>🔧 Admin Configuration</h3>
+    <div class="input-group">
+      <label for="asana-token">Asana Personal Token:</label>
+      <input id="asana-token" type="password" placeholder="Enter your personal token" autocomplete="off" />
+      <span class="token-status" id="token-status"></span>
+    </div>
+    <div class="input-group">
+      <label for="project-id">Default Asana Project ID:</label>
+      <input id="project-id" placeholder="Enter your default project ID" autocomplete="off" />
+    </div>
+    <div class="input-group">
+      <label>Sprint to Project Mapping:</label>
+      <div id="mapping-list"></div>
+      <button class="add-mapping-btn" id="add-mapping-btn">+ Add Mapping</button>
+    </div>
+    <button class="clear-btn" id="clear-settings-button">Clear All Settings</button>
+  </div>
+  <script>
+    // --- UI Tab Logic ---
+    const tabCapacity = document.getElementById('tab-capacity');
+    const tabSupport = document.getElementById('tab-support');
+    const capacitySection = document.getElementById('capacity-section');
+    const supportSection = document.getElementById('support-section');
+    tabCapacity.addEventListener('click', () => {
+      tabCapacity.classList.add('active');
+      tabSupport.classList.remove('active');
+      capacitySection.style.display = '';
+      supportSection.style.display = 'none';
+    });
+    tabSupport.addEventListener('click', () => {
+      tabSupport.classList.add('active');
+      tabCapacity.classList.remove('active');
+      supportSection.style.display = '';
+      capacitySection.style.display = 'none';
+    });
 
-  <nav>
-    <button class="tab active" data-tab="capacity">Capacity Chart</button>
-    <button class="tab" data-tab="support">Support Overview</button>
-  </nav>
+    // --- Admin Config Panel Logic ---
+    const adminConfig = document.getElementById('admin-config');
+    let adminVisible = false;
+    function showAdminConfig() {
+      adminConfig.style.display = 'block';
+      adminVisible = true;
+    }
+    function hideAdminConfig() {
+      adminConfig.style.display = 'none';
+      adminVisible = false;
+    }
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
+        e.preventDefault();
+        adminVisible ? hideAdminConfig() : showAdminConfig();
+      }
+    });
+    document.getElementById('close-admin').onclick = hideAdminConfig;
 
-  <main>
-    <!-- Capacity Chart Section -->
-    <div id="capacity" class="section active">
-      <div class="input-group">
-        <label>Sprint Number:</label>
-        <input id="sprint-number" value="Sprint 12"/>
-      </div>
-      <div class="input-group">
-        <label>Sprint Duration (days):</label>
-        <input type="number" id="sprint-duration" value="30"/>
-      </div>
-      <div class="input-group">
-        <label>Total Working Days:</label>
-        <input type="number" id="total-days" value="20"/>
-      </div>
-      <div class="input-group">
-        <label>Asana Personal Token:</label>
-        <input id="asana-token" placeholder="Enter your personal token" />
-      </div>
-      <button id="sync-button">Sync with Asana</button>
+    // --- Storage Helpers ---
+    function saveToStorage(key, value) {
+      try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) { console.error(e); }
+    }
+    function loadFromStorage(key, defaultVal = {}) {
+      try { const item = localStorage.getItem(key); return item ? JSON.parse(item) : defaultVal; } catch (e) { return defaultVal; }
+    }
 
-      <table id="capacity-table">
+    // --- Admin Config Functionality ---
+    const tokenInput = document.getElementById('asana-token');
+    const tokenStatus = document.getElementById('token-status');
+    const projectIdInput = document.getElementById('project-id');
+    // Restore saved values
+    tokenInput.value = localStorage.getItem('asana-token') || '';
+    projectIdInput.value = localStorage.getItem('defaultProjectId') || '';
+    if (tokenInput.value) { tokenStatus.textContent = '✓ Saved'; }
+    tokenInput.addEventListener('input', () => {
+      tokenStatus.textContent = tokenInput.value ? 'Saving...' : '';
+      tokenStatus.style.color = tokenInput.value ? '#ffc107' : '';
+    });
+    tokenInput.addEventListener('change', () => {
+      localStorage.setItem('asana-token', tokenInput.value);
+      tokenStatus.textContent = tokenInput.value ? '✓ Saved' : '';
+      tokenStatus.style.color = tokenInput.value ? '#22c55e' : '';
+    });
+    projectIdInput.addEventListener('change', () => {
+      localStorage.setItem('defaultProjectId', projectIdInput.value);
+    });
+    // Project mapping logic
+    const mappingList = document.getElementById('mapping-list');
+    const addMappingBtn = document.getElementById('add-mapping-btn');
+    function renderMappings() {
+      const mappings = loadFromStorage('projectMappings', {});
+      mappingList.innerHTML = '';
+      Object.entries(mappings).forEach(([pattern, pid], idx) => {
+        const row = document.createElement('div');
+        row.className = 'mapping-row';
+        row.innerHTML = `
+          <input type="text" value="${pattern}" placeholder="Sprint pattern (e.g., Sprint *)" />
+          <input type="text" value="${pid}" placeholder="Project ID" />
+          <button title="Remove mapping">×</button>
+        `;
+        const [patternInput, pidInput, removeBtn] = row.querySelectorAll('input,button');
+        patternInput.addEventListener('change', () => {
+          const mappings = loadFromStorage('projectMappings', {});
+          const keys = Object.keys(mappings);
+          const oldKey = keys[idx];
+          const val = mappings[oldKey];
+          delete mappings[oldKey];
+          mappings[patternInput.value] = val;
+          saveToStorage('projectMappings', mappings);
+          renderMappings();
+        });
+        pidInput.addEventListener('change', () => {
+          const mappings = loadFromStorage('projectMappings', {});
+          const keys = Object.keys(mappings);
+          const key = keys[idx];
+          mappings[key] = pidInput.value;
+          saveToStorage('projectMappings', mappings);
+        });
+        removeBtn.addEventListener('click', () => {
+          const mappings = loadFromStorage('projectMappings', {});
+          const keys = Object.keys(mappings);
+          const key = keys[idx];
+          delete mappings[key];
+          saveToStorage('projectMappings', mappings);
+          renderMappings();
+        });
+        mappingList.appendChild(row);
+      });
+    }
+    addMappingBtn.onclick = () => {
+      const mappings = loadFromStorage('projectMappings', {});
+      mappings['Sprint *'] = '';
+      saveToStorage('projectMappings', mappings);
+      renderMappings();
+    };
+    renderMappings();
+    // Clear settings
+    document.getElementById('clear-settings-button').onclick = () => {
+      if (confirm('This will clear all saved settings including your Asana token. Are you sure?')) {
+        [
+          'asana-token', 'project-id', 'sprint-number', 'sprint-duration', 'total-days',
+          'capacityData', 'lastSprint', 'defaultProjectId', 'projectMappings'
+        ].forEach(key => localStorage.removeItem(key));
+        tokenInput.value = '';
+        projectIdInput.value = '';
+        tokenStatus.textContent = '';
+        renderMappings();
+      }
+    };
+
+    // --- Asana Integration & Data Logic ---
+    const TSHIRT_SIZES = { 'XS': 1, 'S': 2, 'M': 5, 'L': 8, 'XL': 10 };
+    function getProjectIdFromSprint(sprintName) {
+      const projectMappings = loadFromStorage('projectMappings', {});
+      if (projectMappings[sprintName]) return projectMappings[sprintName];
+      for (const [pattern, projectId] of Object.entries(projectMappings)) {
+        if (pattern.includes('*')) {
+          const regex = new RegExp(pattern.replace(/\*/g, '.*'), 'i');
+          if (regex.test(sprintName)) return projectId;
+        }
+      }
+      return localStorage.getItem('defaultProjectId') || '';
+    }
+    // Sync with Asana
+    document.getElementById('sync-button').onclick = async () => {
+      const sprintName = prompt('Enter Sprint Name/Number:', localStorage.getItem('lastSprint') || '');
+      if (!sprintName) return;
+      localStorage.setItem('lastSprint', sprintName);
+      document.getElementById('sprint-title').textContent = sprintName + ' Capacity Planner';
+      // Optionally update info bar here
+      const token = localStorage.getItem('asana-token');
+      const projectId = getProjectIdFromSprint(sprintName);
+      if (!token || !projectId) {
+        alert('Asana integration not configured. Press Ctrl+Shift+A to configure.');
+        return;
+      }
+      // Fetch Asana tasks
+      try {
+        const tasksResponse = await fetch(
+          `https://app.asana.com/api/1.0/projects/${projectId}/tasks?opt_fields=name,assignee.name,custom_fields,notes`,
+          { headers: { 'Authorization': `Bearer ${token}` } }
+        );
+        if (!tasksResponse.ok) throw new Error('Failed to fetch tasks.');
+        const tasksData = await tasksResponse.json();
+        const tasks = tasksData.data;
+        // Process tasks
+        const members = {};
+        tasks.forEach(task => {
+          const name = task.assignee?.name || 'Unassigned';
+          let tshirtSize = null;
+          if (task.custom_fields && task.custom_fields.length > 0) {
+            const tshirtField = task.custom_fields.find(f => f.name.toLowerCase().includes('t-shirt') || f.name.toLowerCase().includes('size') || f.name.toLowerCase().includes('story point'));
+            if (tshirtField && tshirtField.display_value) {
+              tshirtSize = tshirtField.display_value.toUpperCase();
+            }
+          }
+          if (!tshirtSize && task.notes) {
+            const sizeMatch = task.notes.match(/\b(XS|S|M|L|XL)\b/i);
+            if (sizeMatch) tshirtSize = sizeMatch[1].toUpperCase();
+          }
+          // If still not found, default to zero days
+          const size = tshirtSize && TSHIRT_SIZES[tshirtSize] ? TSHIRT_SIZES[tshirtSize] : 0;
+          if (!members[name]) members[name] = { goals: [], total: 0, support: '', available: 22 };
+          members[name].total += size;
+          members[name].goals.push(task.name);
+        });
+        // Save and render
+        saveToStorage('capacityData', members);
+        renderCapacityTable(members);
+        renderSupportOverview(members);
+      } catch (e) {
+        alert('Sync failed: ' + e.message);
+      }
+    };
+    // Render Capacity Table
+    function renderCapacityTable(members) {
+      const card = document.getElementById('capacity-card');
+      const content = document.getElementById('capacity-table-content');
+      if (!members || Object.keys(members).length === 0) {
+        content.innerHTML = 'No data available. Please sync with Asana.';
+        return;
+      }
+      let html = `<table class="capacity-table" style="width:100%;border-collapse:separate;border-spacing:0;margin-top:1em;">
         <thead>
           <tr>
-            <th>Team Member</th>
-            <th>Capacity %</th>
-            <th>Available Days</th>
-            <th>Status</th>
-            <th>Sprint Goals</th>
-            <th>Support Needed</th>
+            <th class="th-main">Team Member</th>
+            <th class="th-main">Available Days</th>
+            <th class="th-main">Capacity %</th>
+            <th class="th-main">Status</th>
+            <th class="th-main">Sprint Goals</th>
+            <th class="th-main">Support Needed</th>
           </tr>
         </thead>
-        <tbody></tbody>
-      </table>
-
-      <div class="bar-chart" id="capacity-bars"></div>
-    </div>
-
-    <!-- Support Overview Section -->
-    <div id="support" class="section">
-      <div class="support-columns">
-        <div class="support-column">
-          <h3>Needs Support</h3>
-          <ul id="support-needed-list"></ul>
-        </div>
-        <div class="support-column">
-          <h3>Under Capacity</h3>
-          <ul id="under-capacity-list"></ul>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <script>
-    const TSHIRT_SIZES = { 'XS': 1, 'S': 2, 'M': 5, 'L': 8, 'XL': 9 };
-
-    const tabs = document.querySelectorAll('.tab');
-    const sections = document.querySelectorAll('.section');
-
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        sections.forEach(s => s.classList.remove('active'));
-
-        tab.classList.add('active');
-        document.getElementById(tab.dataset.tab).classList.add('active');
-      });
-    });
-
-    function saveToStorage(key, value) {
-      localStorage.setItem(key, JSON.stringify(value));
-    }
-
-    function loadFromStorage(key, defaultVal = {}) {
-      return JSON.parse(localStorage.getItem(key)) || defaultVal;
-    }
-
-    document.getElementById('sync-button').addEventListener('click', async () => {
-      const token = document.getElementById('asana-token').value;
-      if (!token) return alert('Please enter your Asana personal token.');
-
-      const projectId = 'ASANA_PROJECT_ID'; // <-- Replace this
-      const response = await fetch(`https://app.asana.com/api/1.0/projects/${projectId}/tasks?opt_fields=name,assignee.name,custom_fields`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-
-      const json = await response.json();
-      const tasks = json.data;
-
-      const members = {};
-      tasks.forEach(task => {
-        const name = task.assignee?.name || 'Unassigned';
-        const tshirt = task.custom_fields.find(f => f.name.toLowerCase().includes('t-shirt'))?.display_value || 'M';
-        const size = TSHIRT_SIZES[tshirt] || 5;
-
-        if (!members[name]) members[name] = { goals: [], total: 0 };
-        members[name].total += size;
-        members[name].goals.push(task.name);
-      });
-
-      renderCapacityTable(members);
-    });
-
-    function renderCapacityTable(members) {
-      const tbody = document.querySelector('#capacity-table tbody');
-      tbody.innerHTML = '';
-      const barChart = document.getElementById('capacity-bars');
-      barChart.innerHTML = '';
-
-      const totalDays = parseInt(document.getElementById('total-days').value, 10);
-      const supportData = loadFromStorage('supportData');
-      const capacityData = {};
-
+        <tbody>`;
+      let rowIdx = 0;
       Object.entries(members).forEach(([member, data]) => {
-        const stored = loadFromStorage(member);
-        const available = stored.availableDays || totalDays;
-        const support = stored.support || '';
-        const percent = Math.round((data.total / available) * 100);
-        const statusClass = percent < 90 ? 'status-green' : percent <= 105 ? 'status-yellow' : 'status-red';
-        const statusText = percent < 90 ? 'Under Capacity' : percent <= 105 ? 'At Capacity' : 'Over Capacity';
-
-        const tr = document.createElement('tr');
-        tr.className = statusClass;
-
-        tr.innerHTML = `
-          <td>${member}</td>
-          <td>${percent}%</td>
-          <td><input type="number" value="${available}" onchange="saveToStorage('${member}', { availableDays: this.value, support: document.getElementById('support-${member}').value })"/></td>
-          <td>${statusText}</td>
-          <td>${data.goals.join(', ')}</td>
-          <td><input id="support-${member}" value="${support}" onchange="saveToStorage('${member}', { availableDays: document.querySelector('#capacity-table tbody').querySelectorAll('tr').namedItem('${member}').querySelector('input').value, support: this.value })"/></td>
-        `;
-
-        tbody.appendChild(tr);
-
-        // Bar chart
-        const bar = document.createElement('div');
-        bar.className = 'bar';
-        const barInner = document.createElement('div');
-        barInner.className = `bar-inner ${statusClass.split('-')[1]}`;
-        barInner.style.height = `${Math.min(percent, 120)}px`;
-        bar.appendChild(barInner);
-        barChart.appendChild(bar);
-
-        capacityData[member] = { percent, support };
-      });
-
-      saveToStorage('supportData', capacityData);
-      renderSupportOverview();
-    }
-
-    function renderSupportOverview() {
-      const data = loadFromStorage('supportData');
-      const needSupportList = document.getElementById('support-needed-list');
-      const underCapList = document.getElementById('under-capacity-list');
-
-      needSupportList.innerHTML = '';
-      underCapList.innerHTML = '';
-
-      Object.entries(data).forEach(([member, info]) => {
-        if (info.support) {
-          const li = document.createElement('li');
-          li.textContent = `${member}: ${info.support}`;
-          needSupportList.appendChild(li);
+        const available = data.available || 22;
+        const percent = ((data.total / available) * 100).toFixed(1);
+        let status = percent < 90 ? 'MODERATE' : percent <= 105 ? 'AT CAPACITY' : 'AT CAPACITY';
+        let statusColor = percent < 90 ? '#ffe600' : percent <= 105 ? '#ffb800' : '#ffb8b8';
+        let statusTextColor = percent < 90 ? '#b68900' : percent <= 105 ? '#b68900' : '#c92a2a';
+        let statusBg = percent < 90 ? '#fffbe6' : percent <= 105 ? '#fffbe6' : '#fff0f0';
+        let supportBadge = data.support && data.support.trim() && data.support.trim().toLowerCase() !== 'none'
+          ? `<span class="support-badge support-yellow">${data.support}</span>`
+          : `<span class="support-badge support-gray">None</span>`;
+        // Sprint goals with tags
+        let goalsHtml = '';
+        if (data.goals && data.goals.length > 0) {
+          goalsHtml = data.goals.map(goal => {
+            // Try to extract tags (e.g., XL, Enterprise) from goal string
+            let tags = '';
+            const tagMatch = goal.match(/\b(XL|L|M|S|Enterprise|ICS|SCN|CTL|Exchange|Other)\b/gi);
+            if (tagMatch) {
+              tags = tagMatch.map(t => `<span class='goal-tag'>${t}</span>`).join(' ');
+            }
+            return `<div style='margin-bottom:0.2em;'>${goal.replace(/\b(XL|L|M|S|Enterprise|ICS|SCN|CTL|Exchange|Other)\b/gi, '').trim()} ${tags}</div>`;
+          }).join('');
         }
-
-        if (info.percent < 90) {
-          const li = document.createElement('li');
-          li.textContent = `${member} (${info.percent}%)`;
-          underCapList.appendChild(li);
-        }
+        html += `<tr class="tr-row${rowIdx % 2 === 0 ? ' even' : ' odd'}">
+          <td class="td-main left">${member}</td>
+          <td class="td-main left">${available}/22</td>
+          <td class="td-main center"><strong>${percent}%</strong></td>
+          <td class="td-main center">
+            <span class="status-badge" style="background:${statusBg};color:${statusTextColor};">${status}</span>
+          </td>
+          <td class="td-main left">${goalsHtml}</td>
+          <td class="td-main left">${supportBadge}</td>
+        </tr>`;
+        rowIdx++;
       });
+      html += '</tbody></table>';
+      content.innerHTML = html;
+      renderAlerts(members);
+      renderCapacityBarChart(members);
     }
-
-    // Restore data on load
-    window.onload = () => {
-      const inputs = ['sprint-number', 'sprint-duration', 'total-days'];
-      inputs.forEach(id => {
-        const el = document.getElementById(id);
-        const saved = localStorage.getItem(id);
-        if (saved) el.value = saved;
-        el.addEventListener('change', () => localStorage.setItem(id, el.value));
-      });
+    // Add table styles
+    const style = document.createElement('style');
+    style.textContent = `
+      .capacity-table { border-radius: 1rem; overflow: hidden; font-size: 1.05rem; }
+      .capacity-table th.th-main {
+        background: #1741b6;
+        color: #fff;
+        font-weight: 700;
+        padding: 1em 0.7em;
+        text-align: left;
+        border-top-left-radius: 0.7em;
+        border-top-right-radius: 0.7em;
+        border-bottom: 2px solid #e5e7eb;
+      }
+      .capacity-table th.th-main:not(:first-child) { border-top-left-radius: 0; }
+      .capacity-table th.th-main:not(:last-child) { border-top-right-radius: 0; }
+      .capacity-table td.td-main {
+        padding: 1em 0.7em;
+        vertical-align: top;
+        background: #fff;
+        border-bottom: 1px solid #f1f3f7;
+        font-size: 1.05rem;
+      }
+      .capacity-table tr.even td { background: #f8fafc; }
+      .capacity-table tr.odd td { background: #fff; }
+      .capacity-table td.left { text-align: left; }
+      .capacity-table td.center { text-align: center; }
+      .status-badge {
+        display: inline-block;
+        padding: 0.35em 1.1em;
+        border-radius: 1.2em;
+        font-size: 1em;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        background: #fff0f0;
+        color: #c92a2a;
+      }
+      .support-badge {
+        display: inline-block;
+        padding: 0.3em 1em;
+        border-radius: 1em;
+        font-size: 1em;
+        font-weight: 600;
+        margin-top: 0.1em;
+      }
+      .support-yellow { background: #fffbe6; color: #b68900; }
+      .support-gray { background: #f1f3f7; color: #888; }
+      .goal-tag {
+        display: inline-block;
+        background: #e6edfd;
+        color: #1741b6;
+        font-size: 0.93em;
+        font-weight: 600;
+        border-radius: 0.5em;
+        padding: 0.1em 0.7em;
+        margin-left: 0.3em;
+        margin-right: 0.1em;
+      }
+    `;
+    document.head.appendChild(style);
+    // Expose update functions for inline inputs
+    window.updateAvailableDays = function(member, value) {
+      const members = loadFromStorage('capacityData', {});
+      if (members[member]) {
+        members[member].available = parseInt(value, 10) || 20;
+        saveToStorage('capacityData', members);
+        renderCapacityTable(members);
+        renderSupportOverview(members);
+      }
     };
+    window.updateSupport = function(member, value) {
+      const members = loadFromStorage('capacityData', {});
+      if (members[member]) {
+        members[member].support = value;
+        saveToStorage('capacityData', members);
+        renderCapacityTable(members);
+        renderSupportOverview(members);
+      }
+    };
+    // Render Support Overview
+    function renderSupportOverview(members) {
+      if (!members) members = loadFromStorage('capacityData', {});
+      const overList = document.getElementById('over-capacity-list');
+      const underList = document.getElementById('under-capacity-list');
+      overList.innerHTML = '';
+      underList.innerHTML = '';
+      let hasOver = false, hasUnder = false;
+      Object.entries(members).forEach(([member, data]) => {
+        const available = data.available || 20;
+        const percent = Math.round((data.total / available) * 100);
+        if (percent > 105) {
+          const li = document.createElement('li');
+          li.innerHTML = `<strong>${member}</strong> <span style="color:#dc3545;font-weight:600;">(${percent}%)</span><br><span style="font-size:0.95em;">${data.support||''}</span>`;
+          overList.appendChild(li);
+          hasOver = true;
+        }
+        if (percent < 90) {
+          const li = document.createElement('li');
+          li.innerHTML = `<strong>${member}</strong> <span style="color:#22c55e;font-weight:600;">(${percent}%)</span>`;
+          underList.appendChild(li);
+          hasUnder = true;
+        }
+      });
+      if (!hasOver) overList.innerHTML = '<li class="empty-state">No one is over capacity or requesting support.</li>';
+      if (!hasUnder) underList.innerHTML = '<li class="empty-state">No one is under capacity.</li>';
+    }
+    // On load, restore last sprint and data
+    window.onload = () => {
+      const lastSprint = localStorage.getItem('lastSprint');
+      if (lastSprint) document.getElementById('sprint-title').textContent = lastSprint + ' Capacity Planner';
+      const members = loadFromStorage('capacityData', {});
+      if (Object.keys(members).length > 0) {
+        renderCapacityTable(members);
+        renderSupportOverview(members);
+      }
+    };
+
+    // --- UI Bar Chart and Alerts Logic ---
+    function renderCapacityBarChart(members) {
+      const containerId = 'capacity-bar-chart';
+      let container = document.getElementById(containerId);
+      if (!container) {
+        container = document.createElement('div');
+        container.id = containerId;
+        container.style.margin = '2.5rem auto 0 auto';
+        container.style.maxWidth = '900px';
+        container.style.background = '#fff';
+        container.style.borderRadius = '1.25rem';
+        container.style.boxShadow = '0 2px 12px rgba(26,35,183,0.06)';
+        container.style.padding = '2.5rem 1.5rem 2.5rem 1.5rem';
+        container.style.textAlign = 'center';
+        container.style.display = 'block';
+        container.style.position = 'relative';
+        container.style.minHeight = '320px';
+        document.getElementById('capacity-section').appendChild(container);
+      }
+      let html = `<h2 style="font-size:2rem;font-weight:700;color:#222;margin-bottom:2.5rem;">Team Capacity Overview</h2><div style="display:flex;gap:2.5rem;justify-content:center;align-items:end;min-height:200px;">`;
+      if (!members || Object.keys(members).length === 0) {
+        html += '<div style="color:#888;font-size:1.1rem;">No data to display.</div>';
+      } else {
+        Object.entries(members).forEach(([member, data]) => {
+          const available = data.available || 22;
+          const percent = ((data.total / available) * 100).toFixed(1);
+          let barColor = percent < 90 ? '#22c55e' : percent <= 105 ? '#ffc107' : '#f44336';
+          let labelBg = percent < 90 ? '#e6fbe6' : percent <= 105 ? '#fffbe6' : '#ffeaea';
+          let labelColor = percent < 90 ? '#22c55e' : percent <= 105 ? '#b68900' : '#c92a2a';
+          html += `<div style="display:flex;flex-direction:column;align-items:center;gap:0.5em;">
+            <div style="background:${labelBg};color:${labelColor};font-weight:700;font-size:1.1em;padding:0.2em 0.8em;border-radius:0.7em;margin-bottom:0.3em;">${percent}%</div>
+            <div style="width:48px;height:${Math.min(percent,200)}px;background:${barColor};border-radius:1em 1em 0 0;box-shadow:0 2px 8px rgba(0,0,0,0.07);"></div>
+            <div style="font-size:1em;font-weight:600;color:#222;margin-top:0.5em;">${member.split(' ')[0]}</div>
+          </div>`;
+        });
+      }
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
+    // --- UI Alerts Logic ---
+    function renderAlerts(members) {
+      // Remove old alerts
+      const oldAlerts = document.querySelectorAll('.alert-banner');
+      oldAlerts.forEach(el => el.remove());
+      if (!members || Object.keys(members).length === 0) return;
+      // Capacity overload alert
+      const overload = Object.entries(members).filter(([_, d]) => ((d.total/(d.available||22))*100) > 105);
+      if (overload.length > 0) {
+        const alert = document.createElement('div');
+        alert.className = 'alert-banner';
+        alert.style.background = '#ffeaea';
+        alert.style.color = '#c92a2a';
+        alert.style.fontWeight = '600';
+        alert.style.padding = '1.1em 1.5em';
+        alert.style.borderRadius = '0.7em';
+        alert.style.margin = '1.5em auto 0 auto';
+        alert.style.maxWidth = '1100px';
+        alert.style.display = 'flex';
+        alert.style.alignItems = 'center';
+        alert.style.gap = '0.7em';
+        alert.innerHTML = `<span style="font-size:1.3em;">🚨</span> Capacity overload: ${overload.map(([n,d])=>`${n} (${((d.total/(d.available||22))*100).toFixed(1)}%)`).join(', ')}`;
+        document.querySelector('.main-content').insertBefore(alert, document.getElementById('capacity-section'));
+      }
+      // Support needed alert
+      const support = Object.entries(members).filter(([_, d]) => d.support && d.support.trim() && d.support.trim().toLowerCase() !== 'none');
+      if (support.length > 0) {
+        const alert = document.createElement('div');
+        alert.className = 'alert-banner';
+        alert.style.background = '#fffbe6';
+        alert.style.color = '#b68900';
+        alert.style.fontWeight = '600';
+        alert.style.padding = '1.1em 1.5em';
+        alert.style.borderRadius = '0.7em';
+        alert.style.margin = '1em auto 0 auto';
+        alert.style.maxWidth = '1100px';
+        alert.style.display = 'flex';
+        alert.style.alignItems = 'center';
+        alert.style.gap = '0.7em';
+        alert.innerHTML = `<span style="font-size:1.3em;">⚠️🤝</span> ${support.length} team member(s) need support this sprint`;
+        document.querySelector('.main-content').insertBefore(alert, document.getElementById('capacity-section'));
+      }
+    }
   </script>
 </body>
 </html>
