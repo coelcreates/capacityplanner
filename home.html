@@ -1219,8 +1219,14 @@
               f.name.toLowerCase().includes('story point')
             );
             if (tshirtField && tshirtField.display_value) {
-              tshirtSize = tshirtField.display_value.toUpperCase();
-              console.log(`Found t-shirt size: ${tshirtSize} from field: ${tshirtField.name}`);
+              // Extract just the size part (e.g., "XL" from "XL (UP TO 10 DAYS)")
+              const sizeMatch = tshirtField.display_value.match(/\b(XS|S|M|L|XL)\b/i);
+              if (sizeMatch) {
+                tshirtSize = sizeMatch[1].toUpperCase();
+                console.log(`Found t-shirt size: ${tshirtSize} from field: ${tshirtField.name} (original value: ${tshirtField.display_value})`);
+              } else {
+                console.log(`Could not extract size from field value: ${tshirtField.display_value}`);
+              }
             }
             
             // Find work area field
@@ -1249,9 +1255,9 @@
           const size = tshirtSize && TSHIRT_SIZES[tshirtSize] ? TSHIRT_SIZES[tshirtSize] : 0;
           console.log(`Calculated size for capacity: ${size} (from t-shirt size: ${tshirtSize})`);
           
-          // If no size found, default to 'M' (5 days) as per original behavior
-          const finalSize = size > 0 ? size : TSHIRT_SIZES['M'];
-          console.log(`Final size for capacity: ${finalSize} (defaulted to M if no size found)`);
+          // If no size found, keep as 0 days (no fallback to M)
+          const finalSize = size;
+          console.log(`Final size for capacity: ${finalSize} (0 if no size found)`);
           
           if (!members[name]) members[name] = { goals: [], total: 0, support: ['None'], available: 30 };
           members[name].total += finalSize;
