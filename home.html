@@ -1207,6 +1207,9 @@
           let tshirtSize = null;
           let workArea = null;
           
+          console.log(`Processing task: ${task.name} (assigned to: ${name})`);
+          console.log('Custom fields:', task.custom_fields);
+          
           // Extract t-shirt size and work area from custom fields
           if (task.custom_fields && task.custom_fields.length > 0) {
             // Find t-shirt size field
@@ -1217,6 +1220,7 @@
             );
             if (tshirtField && tshirtField.display_value) {
               tshirtSize = tshirtField.display_value.toUpperCase();
+              console.log(`Found t-shirt size: ${tshirtSize} from field: ${tshirtField.name}`);
             }
             
             // Find work area field
@@ -1228,20 +1232,30 @@
             );
             if (workAreaField && workAreaField.display_value) {
               workArea = workAreaField.display_value;
+              console.log(`Found work area: ${workArea} from field: ${workAreaField.name}`);
             }
           }
           
           // Fallback: try to extract from task notes
           if (!tshirtSize && task.notes) {
             const sizeMatch = task.notes.match(/\b(XS|S|M|L|XL)\b/i);
-            if (sizeMatch) tshirtSize = sizeMatch[1].toUpperCase();
+            if (sizeMatch) {
+              tshirtSize = sizeMatch[1].toUpperCase();
+              console.log(`Found t-shirt size in notes: ${tshirtSize}`);
+            }
           }
           
           // Calculate size for capacity
           const size = tshirtSize && TSHIRT_SIZES[tshirtSize] ? TSHIRT_SIZES[tshirtSize] : 0;
+          console.log(`Calculated size for capacity: ${size} (from t-shirt size: ${tshirtSize})`);
+          
+          // If no size found, default to 'M' (5 days) as per original behavior
+          const finalSize = size > 0 ? size : TSHIRT_SIZES['M'];
+          console.log(`Final size for capacity: ${finalSize} (defaulted to M if no size found)`);
           
           if (!members[name]) members[name] = { goals: [], total: 0, support: ['None'], available: 30 };
-          members[name].total += size;
+          members[name].total += finalSize;
+          console.log(`Updated total for ${name}: ${members[name].total}`);
           
           // Store task with metadata for pill display
           members[name].goals.push({
@@ -1251,7 +1265,7 @@
           });
         });
         
-        console.log('Processed members:', Object.keys(members));
+        console.log('Final processed members:', members);
         
         // Save and render
         saveToStorage('capacityData', members);
