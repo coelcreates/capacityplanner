@@ -289,6 +289,27 @@
       cursor: pointer;
       margin-top: 0.5em;
     }
+    #admin-config .save-btn {
+      background: var(--brand-blue);
+      color: white;
+      border: none;
+      padding: 0.75em 1em;
+      border-radius: 0.4em;
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: 500;
+      width: 100%;
+      transition: background-color 0.2s;
+    }
+
+    #admin-config .save-btn:hover {
+      background: #1a23b7;
+    }
+
+    #admin-config .save-btn:active {
+      background: #151a8f;
+    }
+
     #admin-config .clear-btn {
       background: var(--brand-gray);
       color: #fff;
@@ -726,6 +747,9 @@
       <input id="project-id" placeholder="Enter your default project ID" autocomplete="off" />
     </div>
     <div class="input-group">
+      <button id="save-admin-config" class="save-btn">Save Configuration</button>
+    </div>
+    <div class="input-group">
       <label>Sprint to Project Mapping:</label>
       <div id="mapping-list"></div>
       <button class="add-mapping-btn" id="add-mapping-btn">+ Add Mapping</button>
@@ -1036,21 +1060,46 @@
     const tokenInput = document.getElementById('asana-token');
     const tokenStatus = document.getElementById('token-status');
     const projectIdInput = document.getElementById('project-id');
+    const saveAdminBtn = document.getElementById('save-admin-config');
+    
     // Restore saved values
     tokenInput.value = localStorage.getItem('asana-token') || '';
     projectIdInput.value = localStorage.getItem('defaultProjectId') || '';
     if (tokenInput.value) { tokenStatus.textContent = '✓ Saved'; }
-    tokenInput.addEventListener('input', () => {
-      tokenStatus.textContent = tokenInput.value ? 'Saving...' : '';
-      tokenStatus.style.color = tokenInput.value ? '#ffc107' : '';
-    });
-    tokenInput.addEventListener('change', () => {
+    
+    // Save configuration function
+    function saveAdminConfig() {
       localStorage.setItem('asana-token', tokenInput.value);
+      localStorage.setItem('defaultProjectId', projectIdInput.value);
       tokenStatus.textContent = tokenInput.value ? '✓ Saved' : '';
       tokenStatus.style.color = tokenInput.value ? '#22c55e' : '';
+      
+      // Show brief success feedback
+      const originalText = saveAdminBtn.textContent;
+      saveAdminBtn.textContent = '✓ Saved!';
+      saveAdminBtn.style.background = '#22c55e';
+      setTimeout(() => {
+        saveAdminBtn.textContent = originalText;
+        saveAdminBtn.style.background = '';
+      }, 1500);
+    }
+    
+    // Save button click handler
+    saveAdminBtn.addEventListener('click', saveAdminConfig);
+    
+    // Enter key handlers for both inputs
+    tokenInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        saveAdminConfig();
+      }
     });
-    projectIdInput.addEventListener('change', () => {
-      localStorage.setItem('defaultProjectId', projectIdInput.value);
+    
+    projectIdInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        saveAdminConfig();
+      }
     });
     // Project mapping logic
     const mappingList = document.getElementById('mapping-list');
@@ -1459,7 +1508,8 @@
             
             // T-shirt size pill
             if (tshirtSize) {
-              pills += `<span class='goal-tag'>${tshirtSize}</span>`;
+              const days = TSHIRT_SIZES[tshirtSize];
+              pills += `<span class='goal-tag'>${tshirtSize} (${days} days)</span>`;
             } else {
               pills += `<span class='goal-tag missing-size'>Missing Size</span>`;
             }
