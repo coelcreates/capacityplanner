@@ -929,25 +929,11 @@
             }
           }
         }
-        
-        // Fallback to localStorage
-        const item = localStorage.getItem(key);
-        if (item) {
-          console.log(`Data loaded from localStorage: ${key}`);
-          return JSON.parse(item);
-        }
-        
+        // No fallback to localStorage for team data
         return defaultVal;
       } catch (e) { 
         console.error('Load error:', e);
-        // Final fallback to localStorage
-        try {
-          const item = localStorage.getItem(key);
-          return item ? JSON.parse(item) : defaultVal;
-        } catch (localError) {
-          console.error('localStorage fallback failed:', localError);
-          return defaultVal;
-        }
+        return defaultVal;
       }
     }
     
@@ -1002,20 +988,11 @@
             return result.data;
           }
         }
-        
-        // Fallback to localStorage
-        const item = localStorage.getItem('capacityData');
-        return item ? JSON.parse(item) : {};
+        // No fallback to localStorage for team data
+        return {};
       } catch (e) {
         console.error('Load capacity data error:', e);
-        // Final fallback to localStorage
-        try {
-          const item = localStorage.getItem('capacityData');
-          return item ? JSON.parse(item) : {};
-        } catch (localError) {
-          console.error('localStorage fallback failed:', localError);
-          return {};
-        }
+        return {};
       }
     }
     
@@ -2185,7 +2162,6 @@
                 if (this.save(key, value)) {
                   restoredCount++;
                 }
-              }
             });
             console.log(`✅ Restored ${restoredCount} items from backup`);
             return restoredCount;
