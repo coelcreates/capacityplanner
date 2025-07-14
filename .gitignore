@@ -27,3 +27,4 @@ build/
 ehthumbs.db
 Thumbs.db 
 .vercel
+.env*.local
