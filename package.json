@@ -34,5 +34,27 @@
   "bugs": {
     "url": "https://github.com/coelcreates/capacityplanner/issues"
   },
-  "homepage": "https://github.com/coelcreates/capacityplanner#readme"
+  "homepage": "https://github.com/coelcreates/capacityplanner#readme",
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/home.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-XSS-Protection", "value": "1; mode=block" }
+      ]
+    }
+  ],
+  "functions": {
+    "api/*.js": {
+      "runtime": "nodejs18.x"
+    }
+  }
 } 
